@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Addproductcontent from '../sections/Addproductcontent'
+import Addproductcontent from '../sections/Addproduct/Addproductcontent'
 import Quickbar from '../layouts/Quickbar';
 
 
