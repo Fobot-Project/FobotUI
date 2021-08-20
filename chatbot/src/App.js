@@ -9,8 +9,9 @@ import {
   Redirect
 } from "react-router-dom";
 
-import Addproduct from './components/sections/Addproductcontent';
-import Addproductcontent from './components/sections/Addproductcontent';
+import Addproduct from './components/sections/Addproduct/Addproductcontent';
+import Addproductcontent from './components/pages/Addproduct';
+import Menulist from './components/pages/Menulist';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Addproductcontent} />
         <Route path="/add-product" component={Addproductcontent} />
+        <Route path="/menu-list" component={Menulist} />
       </Switch>
     </Router>
   );
