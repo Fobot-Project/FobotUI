@@ -10,7 +10,7 @@ class Addproductcontent extends Component {
                     <div className="col-md-12">
                         <Breadcrumb/>
                         <div className="alert alert-success" role="alert">
-                            <strong>Well done!</strong> You successfully read this important alert message.
+                            <strong>Hi!</strong> Please add product information here
       </div>
                     </div>
                     <div className="col-xl-6 col-md-12">
