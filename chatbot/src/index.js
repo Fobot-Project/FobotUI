@@ -1,19 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from 'react-router-dom';
+import reportWebVitals from './reportWebVitals';
+// Css
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
-
+import './assets/css/animate.min.css';
 import './assets/css/style.css';
-
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
 
 ReactDOM.render(
   <BrowserRouter basename={'/chatbot'}>
