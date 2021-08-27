@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Breadcrumb from '../Addproduct/Breadcrumb';
+import Breadcrumb from './Breadcrumb';
+
 
 class Addproductcontent extends Component {
     render() {
@@ -16,7 +17,6 @@ class Addproductcontent extends Component {
                         <div className="ms-panel ms-panel-fh">
                             <div className="ms-panel-header">
                                 <h6>Add Product Form</h6>
-                                
                             </div>
                             <div className="ms-panel-body">
                                 <form className="needs-validation clearfix" noValidate>
@@ -104,7 +104,9 @@ class Addproductcontent extends Component {
                                     <div className="ms-panel-header">
                                         <h6>Product </h6>
                                     </div>
-                            
+                                    <div className="ms-panel-body">
+                                        
+                                    </div>
                                     <div className="ms-panel-header new">
                                         <p className="medium">Status Available</p>
                                         <div>
