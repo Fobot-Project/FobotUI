@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Breadcrumbs from './Breadcrumb';
+import "datatables.net-bs4/js/dataTables.bootstrap4"
 // import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"
 import $ from 'jquery';
 
 var dataSet = [
    //image
-  ];
+ ];
 class Listcontent extends Component {
     componentDidMount() {
         //initialize datatable
