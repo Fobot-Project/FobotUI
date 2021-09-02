@@ -9,6 +9,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import {
+  addRestaurant
+} from "../../../firebase";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -25,8 +28,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
+
 export default function FormDialog() {
   const [open, setOpen] = React.useState(false);
+  const [name, setName] =React.useState("");
+  const [address, setAddress] =React.useState("");
+  const [phone, setPhone] =React.useState("");
+
+
+
+
+  function handleAdd(){
+    if(name===""){
+      console.log(
+        "..."
+      )
+    }else{
+      if(addRestaurant(name,address,phone)){
+        //添加成功
+        console.log("成功")
+      }else{
+        console.log(
+          console.log("添加失败！")
+        )
+      }
+    }
+  
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,6 +93,9 @@ export default function FormDialog() {
             id="Restaurant name"
             label="Restaurant name"
             autoFocus
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           />
 
           <TextField
@@ -75,6 +107,9 @@ export default function FormDialog() {
             id="Restaurant address"
             label="Restaurant address"
             fullWidth
+            onChange={(e) => {
+              setAddress(e.target.value);
+            }}
           />
 
           <TextField
@@ -85,6 +120,9 @@ export default function FormDialog() {
             label="phone number"
             type="number"
             fullWidth
+            onChange={(e) => {
+              setPhone(e.target.value);
+            }}
           />
 
         </DialogContent>
@@ -93,8 +131,8 @@ export default function FormDialog() {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Subscribe
+          <Button onClick={handleAdd} color="primary">
+            Add
           </Button>
         </DialogActions>
       </Dialog>

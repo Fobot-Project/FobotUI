@@ -72,6 +72,29 @@ const sendPasswordResetEmail = async (email) => {
 const logout = () => {
   auth.signOut();
 };
+
+
+const addRestaurant = async (name, address, phonenum) => {
+  if(!name){
+    alert("Name is empty!"
+    )
+    return false;
+  }
+  try {
+    // const user = res.user;
+    const data = {
+      name: name,
+      address: address,
+      phonenum: phonenum
+    }
+    await db.collection("Restaurants").add(data);
+    return true
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+    return false
+  }
+};
   
 export {
   auth,
@@ -79,5 +102,6 @@ export {
   signInWithEmailAndPassword,
   registerWithEmailAndPassword,
   sendPasswordResetEmail,
+  addRestaurant,
   logout,
 };
