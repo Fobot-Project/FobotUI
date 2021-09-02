@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { useAuthState } from "react-firebase-hooks/auth";
 import {
   addRestaurant
 } from "../../../firebase";
@@ -35,6 +36,7 @@ export default function FormDialog() {
   const [name, setName] =React.useState("");
   const [address, setAddress] =React.useState("");
   const [phone, setPhone] =React.useState("");
+  // const {currentUser} = useAuthState()
 
 
 

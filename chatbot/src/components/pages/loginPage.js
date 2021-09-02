@@ -26,7 +26,7 @@ export default function Login() {
   }
 
   function handleNavToLogin(){
-    history.push('/')
+    history.push('/register')
   }
  
   return (
