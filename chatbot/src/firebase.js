@@ -23,6 +23,7 @@ var firebaseConfig = {
     } catch (err) {
       console.error(err);
       alert(err.message);
+      throw(new Error)
     }
   };
   
