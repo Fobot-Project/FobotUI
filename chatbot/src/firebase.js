@@ -47,11 +47,14 @@ var firebaseConfig = {
         authProvider: "local",
         icon_image: defaultImage
       }
+      
       await db.collection("User").doc(user.uid).set(data);
       await db.collection("User").doc(user.uid).collection("restaurants").doc("Empty").set({
         status: "empty"
       });
-      return true
+      return auth.currentUser.updateProfile({
+        displayName: name
+      });
     } catch (err) {
       console.error(err);
       alert(err.message);
@@ -97,6 +100,10 @@ const addRestaurant = async (name, address, phonenum) => {
   }
 };
   
+const getcurrentuser =()=>{
+  return auth.currentUser.displayName
+};
+
 export {
   auth,
   db,
@@ -105,4 +112,5 @@ export {
   sendPasswordResetEmail,
   addRestaurant,
   logout,
+  getcurrentuser,
 };

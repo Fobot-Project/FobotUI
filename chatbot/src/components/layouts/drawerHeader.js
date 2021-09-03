@@ -1,4 +1,5 @@
 import React from 'react';
+import { auth, getcurrentuser} from "../../firebase";
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -17,7 +18,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems } from './listItems';
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -137,7 +137,7 @@ export default function PageSkeleton(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Fobot
+            {getcurrentuser()}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
