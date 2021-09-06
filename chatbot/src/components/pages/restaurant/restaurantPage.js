@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import PageSkeleton from '../../layouts/drawerHeader';
 import { makeStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,9 +14,9 @@ import {
   addRestaurant
 } from "../../../firebase";
 
+import {getRestaurants} from '../../../firebase';
+
 const useStyles = makeStyles((theme) => ({
-
-
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
@@ -28,7 +28,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
+// class restaurantPage extends Component {
+//   constructor (props) {
+//     super(props);
+//     this.state = {
+//       restaurants: [],
+//     }
+//   }
+//   componentDidMount(){
+//     getRestaurants().then(doc => {
+//       console.log('componentDidMount', 'Data Received');
+//       this.setState({ restaurants: doc });
+//     })
+//   }
+//   render(){
+//     const {restaurants} = this.state
+//     return (
+//       <div></div>
+//     )
+//   }
+// }
 
 
 export default function FormDialog() {
@@ -37,9 +56,6 @@ export default function FormDialog() {
   const [address, setAddress] =React.useState("");
   const [phone, setPhone] =React.useState("");
   // const {currentUser} = useAuthState()
-
-
-
 
   function handleAdd(){
     if(name===""){
@@ -120,14 +136,19 @@ export default function FormDialog() {
             name="phone number"
             id="phone number"
             label="phone number"
-            type="number"
+            // type="number"
             fullWidth
             onChange={(e) => {
               setPhone(e.target.value);
             }}
           />
+          <label>Restaurant Image</label>
+          <input type="file" name='file' id="fileButton"/>
+          <progress value="0" max="100" id="uploader">0%</progress>
+          {/* <input type="submit" value="上传"/> */}
 
         </DialogContent>
+
 
         <DialogActions>
           <Button onClick={handleClose} color="primary">

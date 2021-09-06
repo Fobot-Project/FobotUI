@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import 'firebase/firestore'
 
 
 // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
@@ -10,12 +11,15 @@ var firebaseConfig = {
     storageBucket: "test-bot-hldq.appspot.com",
     messagingSenderId: "102684075085",
     appId: "1:102684075085:web:8856a30e60aa994b94e804"
+    
   };
+ 
   // Initialize Firebase
   const app = firebase.initializeApp(firebaseConfig);
   const defaultImage = "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
   const auth = app.auth();
   const db = app.firestore();
+  const firestore = app.firestore()
   
   const signInWithEmailAndPassword = async (email, password) => {
     try {
@@ -103,6 +107,48 @@ const addRestaurant = async (name, address, phonenum) => {
 const getcurrentuser =()=>{
   return auth.currentUser.displayName
 };
+
+// real-time listener
+export const getRestaurants = () => {
+  return new Promise((resolve, reject) => {
+    firestore.collection("Restaurants")
+    .onSnapshot((snapshot) => {
+      console.log('Received doc snapshot: ${docSnapshot}')
+      let updatedData = snapshot.docs.map(doc => doc.data())
+      resolve(updatedData)
+    }, reject)
+  })
+}
+
+//Get elements
+var fileButton = document.getElementById('fileButton');
+var uploader = document.getElementById('uploder');
+//Listen for file selection
+fileButton.addEventListener('change', function(e){
+  //Get file
+  var file = e.target.files[0];
+  //create a storage ref
+  var storageRef = firebase.storage().ref('retaurants_images/'+file.name);
+  //upload file
+  var task = storageRef.put(file);
+  //Update progress bar
+  task.on('state_changed',
+    function progress(snapshot){
+      var percentage = (snapshot.bytesTransFerred /
+        snapshot.totalBytes) * 100;
+        uploader.value = percentage;
+    },
+    function errerror(err){
+
+    },
+    function complete() {
+
+    }
+    
+  );
+
+});
+
 
 export {
   auth,
