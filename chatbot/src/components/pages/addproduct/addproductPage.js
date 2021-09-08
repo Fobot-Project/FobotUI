@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import PageSkeleton from '../../layouts/drawerHeader';
 import { makeStyles } from '@material-ui/core/styles';
-import React, { Component } from 'react';
+import React, {useState, useEffect} from "react";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -13,10 +13,18 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from "@material-ui/core/Typography";
+import { addProduct, db, getProducts} from "../../../firebase";
 
-import {
-  addProduct
-} from "../../../firebase";
+
+// import {
+//   addProduct
+// } from "../../../firebase";
 
 // import {getRestaurants} from '../../../firebase';
 
@@ -37,17 +45,34 @@ const useStyles = makeStyles((theme) => ({
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
+  photo: {
+    height: 200,
+    width: 500
+  },
+  root: {
+    maxWidth: 500,
+  },
+  media: {
+    height: 140,
+  },
 }));
 
 
 
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [name, setName] =React.useState("");
-  const [price, setPrice] =React.useState("");
-  const [description, setDescription] =React.useState("");
+  const [open, setOpen] = useState(false);
+  const [name, setName] =useState("");
+  const [price, setPrice] =useState("");
+  const [description, setDescription] =useState("");
   // const {currentUser} = useAuthState()
+  const [Products, setProducts] = useState([])
+  
+  useEffect(() => {
+    getProducts().then(doc => {
+    setProducts(doc)
+  })
+  },[open] )
   
   const [Catagory, setCatagory] = React.useState('');
 
@@ -181,6 +206,34 @@ export default function FormDialog() {
           </Button>
         </DialogActions>
       </Dialog>
+      {Products.map((Product) => (
+          <Card className={classes.root}>
+            <CardActionArea>
+              <CardMedia
+                className={classes.photo}
+                component="img"
+                alt={Product.name}
+                height="140"
+                image= "https://picsum.photos/200/300"  //{Product.url}
+                title={Product.name}
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {Product.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {Product.price}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" component="p">
+                  {Product.description}
+                </Typography>
+              </CardContent>
+              
+            </CardActionArea>
+
+          </Card>
+          
+        ))}
     </div>
     );
   };

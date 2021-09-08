@@ -30,7 +30,14 @@ const useStyles = makeStyles((theme) => ({
   photo: {
     height: 200,
     width: 500
-  }
+  },
+
+  root: {
+    maxWidth: 500,
+  },
+  media: {
+    height: 140,
+  },
 
   
 }));

@@ -118,7 +118,7 @@ const addProduct = async (name, price, description,Catagory) => {
       description: description,
       Catagory: Catagory
     }
-    await db.collection("Product").add(data);
+    await db.collection("Products").add(data);
     return true
   } catch (err) {
     console.error(err);
@@ -131,10 +131,22 @@ const getcurrentuser =()=>{
   return auth.currentUser.displayName
 };
 
-// real-time listener
+// real-time listener getRestaurants
 export const getRestaurants = () => {
   return new Promise((resolve, reject) => {
     firestore.collection("Restaurants")
+    .onSnapshot((snapshot) => {
+      console.log('Received doc snapshot: ${docSnapshot}')
+      let updatedData = snapshot.docs.map(doc => doc.data())
+      resolve(updatedData)
+    }, reject)
+  })
+}
+
+// real-time listener getProducts
+export const getProducts = () => {
+  return new Promise((resolve, reject) => {
+    firestore.collection("Products")
     .onSnapshot((snapshot) => {
       console.log('Received doc snapshot: ${docSnapshot}')
       let updatedData = snapshot.docs.map(doc => doc.data())
