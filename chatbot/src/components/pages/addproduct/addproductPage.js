@@ -163,8 +163,11 @@ export default function FormDialog() {
          
           <label>Product Image</label>
           <input type="file" name='file' id="fileButton"/>
-          <progress value="0" max="100" id="uploader">0%</progress>
+          {/* <progress value="0" max="100" id="uploader">0%</progress> */}
           {/* <input type="submit" value="上传"/> */}
+          {/* <input type="file" onChange={handleChange}/>
+          <Button onClick={handleupload}>upload</Button> */}
+
 
         </DialogContent>
 
