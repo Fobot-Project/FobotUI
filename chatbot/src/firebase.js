@@ -103,6 +103,29 @@ const addRestaurant = async (name, address, phonenum) => {
     return false
   }
 };
+
+const addProduct = async (name, price, description,Catagory) => {
+  if(!name){
+    alert("Name is empty!"
+    )
+    return false;
+  }
+  try {
+    // const user = res.user;
+    const data = {
+      name: name,
+      price: price,
+      description: description,
+      Catagory: Catagory
+    }
+    await db.collection("Product").add(data);
+    return true
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+    return false
+  }
+};
   
 const getcurrentuser =()=>{
   return auth.currentUser.displayName
@@ -120,34 +143,34 @@ export const getRestaurants = () => {
   })
 }
 
-//Get elements
-var fileButton = document.getElementById('fileButton');
-var uploader = document.getElementById('uploder');
-//Listen for file selection
-fileButton.addEventListener('change', function(e){
-  //Get file
-  var file = e.target.files[0];
-  //create a storage ref
-  var storageRef = firebase.storage().ref('retaurants_images/'+file.name);
-  //upload file
-  var task = storageRef.put(file);
-  //Update progress bar
-  task.on('state_changed',
-    function progress(snapshot){
-      var percentage = (snapshot.bytesTransFerred /
-        snapshot.totalBytes) * 100;
-        uploader.value = percentage;
-    },
-    function errerror(err){
+// //Get elements
+// var fileButton = document.getElementById('fileButton');
+// var uploader = document.getElementById('uploder');
+// //Listen for file selection
+// fileButton.addEventListener('change', function(e){
+//   //Get file
+//   var file = e.target.files[0];
+//   //create a storage ref
+//   var storageRef = firebase.storage().ref('retaurants_images/'+file.name);
+//   //upload file
+//   var task = storageRef.put(file);
+//   //Update progress bar
+//   task.on('state_changed',
+//     function progress(snapshot){
+//       var percentage = (snapshot.bytesTransFerred /
+//         snapshot.totalBytes) * 100;
+//         uploader.value = percentage;
+//     },
+//     function errerror(err){
 
-    },
-    function complete() {
+//     },
+//     function complete() {
 
-    }
+//     }
     
-  );
+//   );
 
-});
+// });
 
 
 export {
@@ -159,4 +182,5 @@ export {
   addRestaurant,
   logout,
   getcurrentuser,
+  addProduct,
 };

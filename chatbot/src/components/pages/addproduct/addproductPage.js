@@ -1,10 +1,26 @@
 import clsx from 'clsx';
 import PageSkeleton from '../../layouts/drawerHeader';
 import { makeStyles } from '@material-ui/core/styles';
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
+import {
+  addProduct
+} from "../../../firebase";
+
+// import {getRestaurants} from '../../../firebase';
 
 const useStyles = makeStyles((theme) => ({
-
-
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
@@ -14,107 +30,160 @@ const useStyles = makeStyles((theme) => ({
   fixedHeight: {
     height: 240,
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
-export default function BookingPage() {
+
+
+
+export default function FormDialog() {
+  const [open, setOpen] = React.useState(false);
+  const [name, setName] =React.useState("");
+  const [price, setPrice] =React.useState("");
+  const [description, setDescription] =React.useState("");
+  // const {currentUser} = useAuthState()
+  
+  const [Catagory, setCatagory] = React.useState('');
+
+  const handleChange = (event) => {
+    setCatagory(event.target.value);
+  };
+
+  function handleAdd(){
+    if(name===""){
+      console.log(
+        "..."
+      )
+    }else{
+      if(addProduct(name,price,description,Catagory)){
+        //添加成功
+        console.log("成功")
+      }else{
+        console.log(
+          console.log("添加失败！")
+        )
+      }
+    }
+  
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const content = () => {
+
     return (
-        <div className="ms-content-wrapper">
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="alert alert-success" role="alert">
-                        <strong>Please add a menu!</strong> 
-  </div>
-                </div>
-                <div className="col-xl-6 col-md-12">
-                    <div className="ms-panel ms-panel-fh">
-                        <div className="ms-panel-header">
-                            <h6>Add Product Form</h6>
-                        </div>
-                        <div className="ms-panel-body">
-                            <form className="needs-validation clearfix" noValidate>
-                                <div className="form-row">
-                                    <div className="col-md-12 mb-3">
-                                        <label htmlFor="validationCustom18">Product Name</label>
-                                        <div className="input-group">
-                                            <input type="text" className="form-control" id="validationCustom18" placeholder="Product Name" defaultValue="Pizza" required />
-                                            <div className="valid-feedback">
-                                              
-              </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="validationCustom22">Select Catagory</label>
-                                        <div className="input-group">
-                                            <select className="form-control" id="validationCustom22" required>
-                                                <option value>Catagory 1</option>
-                                                <option value>Catagory 2</option>
-                                                <option value>Catagory 3</option>
-                                                <option value>Catagory 4</option>
-                                            </select>
-                                            <div className="invalid-feedback">
-                                                
-              </div>
-                                        </div>
-                              
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="validationCustom24">Quantity</label>
-                                        <div className="input-group">
-                                            <input type="text" className="form-control" id="validationCustom24" placeholder="01" required />
-                                            <div className="invalid-feedback">
-                                              
-              </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label htmlFor="validationCustom25">Price</label>
-                                        <div className="input-group">
-                                            <input type="text" className="form-control" id="validationCustom25" placeholder="$10" required />
-                                            <div className="invalid-feedback">
-                                          
-              </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-12 mb-3">
-                                        <label htmlFor="validationCustom12">Description</label>
-                                        <div className="input-group">
-                                            <textarea rows={5} id="validationCustom12" className="form-control" placeholder="Message" required />
-                                            <div className="invalid-feedback">
-                                         
-              </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-md-12 mb-3">
-                                        <label htmlFor="validationCustom12">Product Image</label>
-                                        <div className="custom-file">
-                                            <input type="file" className="custom-file-input" id="validatedCustomFile" />
-                                            <label className="custom-file-label" htmlFor="validatedCustomFile">Upload Images...</label>
-                                            <div className="invalid-feedback"> </div>
-                                        </div>
-                                    </div>
+        
+      <div>
+      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+        Add product
+      </Button>
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Add product information</DialogTitle>
 
-                                    <div className="ms-panel-header new">
-                                    <button className="btn btn-secondary d-block" type="submit">Save</button>
-                                    <button className="btn btn-primary d-block" type="submit">Save and Add</button>
-                                </div>
-                                
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-               
-            </div>
-        </div>
+        <DialogContent>
 
+          <DialogContentText>
+           Please enter the basic information of your product
+          </DialogContentText>
+
+          <TextField
+            // margin="dense"
+            name="Product name"
+            required
+            fullWidth
+            multiline
+            id="Product name"
+            label="Product name"
+            autoFocus
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+
+      <FormControl className={classes.formControl}>
+        <InputLabel id="demo-simple-select-helper-label">Catagory</InputLabel>
+        <Select
+            labelId="demo-simple-select-helper-label"
+            id="demo-simple-select-helper"
+            value={Catagory}
+            onChange={handleChange}
+            >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          {/* <MenuItem value={Vegetable}>Vegetable</MenuItem>
+          <MenuItem value={Meat}>Meat</MenuItem>
+          <MenuItem value={Dessert}>Dessert</MenuItem>
+          <MenuItem value={Drink}>Drink</MenuItem> */}
+        </Select>
+      </FormControl>
+
+          <TextField
+            autoFocus
+            required
+            multiline
+            margin="dense"
+            name="Price"
+            id="Price"
+            label="Price"
+            fullWidth
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+          />
+
+         <TextField
+            autoFocus
+            required
+            multiline
+            margin="dense"
+            name="Description"
+            id="Description"
+            label="Description"
+            fullWidth
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+          />
+
+         
+          <label>Product Image</label>
+          <input type="file" name='file' id="fileButton"/>
+          <progress value="0" max="100" id="uploader">0%</progress>
+          {/* <input type="submit" value="上传"/> */}
+
+        </DialogContent>
+
+
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleAdd} color="primary">
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
     );
   };
 
   return(
     <PageSkeleton content={content}/>
   );
+
 }
