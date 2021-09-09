@@ -17,6 +17,8 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import { addRestaurant, db, getRestaurants} from "../../../firebase";
 import { useHistory } from "react-router-dom";
+import { storage } from "../../../firebase"
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -47,6 +49,7 @@ export default function FormDialog() {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
+  const [image, setImage] = useState(null);
   const history = useHistory();
   // const {currentUser} = useAuthState()
   const [restaurants, setRestaurants] = useState([])
@@ -83,6 +86,37 @@ export default function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChange = e => {
+    if (e.target.files[0]){
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleUpload = () =>{
+    const uploadTask = storage.ref('users images/retaurants_images').put(image);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {},
+      error => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("image")
+          .child(image.name)
+          .getDownloadURL()
+          .then(url => {
+            console.log(url);
+          }
+
+          );
+      }
+    );
+  };
+
+  console.log("image: ",image)
+
 
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -146,6 +180,12 @@ export default function FormDialog() {
                 setPhone(e.target.value);
               }}
             />
+
+            <input type = "file" onChange={handleChange}/>
+            <Button onClick = {handleUpload}>Upload</Button>
+
+
+            
           </DialogContent>
 
           <DialogActions>
@@ -164,6 +204,7 @@ export default function FormDialog() {
                 className={classes.photo}
                 component="img"
                 alt={restaurant.name}
+                //alt={firebase-image}
                 height="140"
                 image= "https://picsum.photos/200/300"  //{restaurant.url}
                 title={restaurant.name}

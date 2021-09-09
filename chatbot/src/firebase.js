@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import 'firebase/firestore'
+import "firebase/storage";
 
 
 // For Firebase JavaScript SDK v7.20.0 and later, `measurementId` is an optional field
@@ -20,6 +21,9 @@ var firebaseConfig = {
   const auth = app.auth();
   const db = app.firestore();
   const firestore = app.firestore()
+  const storage = firebase.storage();
+
+  export { storage, firebase as default };
   
   const signInWithEmailAndPassword = async (email, password) => {
     try {
@@ -82,7 +86,7 @@ const logout = () => {
 };
 
 
-const addRestaurant = async (name, address, phonenum) => {
+const addRestaurant = async (name, address, phonenum, userID) => {
   if(!name){
     alert("Name is empty!"
     )
@@ -95,7 +99,7 @@ const addRestaurant = async (name, address, phonenum) => {
       address: address,
       phonenum: phonenum
     }
-    await db.collection("Restaurants").add(data);
+    await db.collection("User").doc(userID).collection("Restaurants").add(data);
     return true
   } catch (err) {
     console.error(err);
@@ -104,21 +108,20 @@ const addRestaurant = async (name, address, phonenum) => {
   }
 };
 
-const addProduct = async (name, price, description,Catagory) => {
+const addProduct = async (name, price, description,Catagory,userID,RID) => {
   if(!name){
     alert("Name is empty!"
     )
     return false;
   }
   try {
-    // const user = res.user;
     const data = {
       name: name,
       price: price,
       description: description,
       Catagory: Catagory
     }
-    await db.collection("Products").add(data);
+    await db.collection("User").doc(userID).collection("Restaurants").doc(RID).collection("Products").add(data);
     return true
   } catch (err) {
     console.error(err);
