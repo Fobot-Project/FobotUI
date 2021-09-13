@@ -19,14 +19,9 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import { addProduct, db, getProducts} from "../../../firebase";
-
-
-// import {
-//   addProduct
-// } from "../../../firebase";
-
-// import {getRestaurants} from '../../../firebase';
+import { addProduct, db, getProducts, getcurrentrestaurantId} from "../../../firebase";
+import { useHistory } from "react-router-dom";
+import { storage } from "../../../firebase";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -65,34 +60,56 @@ export default function FormDialog() {
   const [name, setName] =useState("");
   const [price, setPrice] =useState("");
   const [description, setDescription] =useState("");
+  const [image, setImage] = useState(null);
+  const [Catagory, setCatagory] = useState('');
+  const history = useHistory();
   // const {currentUser} = useAuthState()
   const [Products, setProducts] = useState([])
-  
+  // const RestaurantId = getcurrentrestaurantId();
   useEffect(() => {
     getProducts().then(doc => {
     setProducts(doc)
   })
   },[open] )
   
-  const [Catagory, setCatagory] = React.useState('');
-
   const handleChange = (event) => {
     setCatagory(event.target.value);
   };
 
   function handleAdd(){
+    const uploadTask = storage
+    .ref("users images/retaurants_images/Menu_images" + image.name)
+    .put(image);
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {},
+    (error) => {
+      console.log(error);
+    },
+    () => {
+      storage
+        .ref("image")
+        .child(image.name)
+        .getDownloadURL()
+        .then((url) => {
+          console.log(url);
+        });
+    }
+  );
+
     if(name===""){
       console.log(
         "..."
       )
     }else{
-      if(addProduct(name,price,description,Catagory)){
+      if(addProduct(name,price,description,Catagory
+        // ,RestaurantId
+        )){
         //添加成功
-        console.log("成功")
-      }else{
-        console.log(
-          console.log("添加失败！")
-        )
+        console.log("成功");
+        setOpen(false);
+      } else {
+        console.log(console.log("添加失败！"));
       }
     }
   
@@ -105,6 +122,14 @@ export default function FormDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleChangeimg = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  console.log("image: ", image);
 
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
@@ -150,10 +175,10 @@ export default function FormDialog() {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          {/* <MenuItem value={Vegetable}>Vegetable</MenuItem>
-          <MenuItem value={Meat}>Meat</MenuItem>
-          <MenuItem value={Dessert}>Dessert</MenuItem>
-          <MenuItem value={Drink}>Drink</MenuItem> */}
+          <MenuItem value="vegetable">Vegetable</MenuItem>
+          <MenuItem value="meat">Meat</MenuItem>
+          <MenuItem value="dessert">Dessert</MenuItem>
+          <MenuItem value="drink">Drink</MenuItem>
         </Select>
       </FormControl>
 
@@ -185,14 +210,8 @@ export default function FormDialog() {
             }}
           />
 
-         
           <label>Product Image</label>
-          <input type="file" name='file' id="fileButton"/>
-          {/* <progress value="0" max="100" id="uploader">0%</progress> */}
-          {/* <input type="submit" value="上传"/> */}
-          {/* <input type="file" onChange={handleChange}/>
-          <Button onClick={handleupload}>upload</Button> */}
-
+          <input type="file" onChange={handleChangeimg} />
 
         </DialogContent>
 
@@ -207,7 +226,7 @@ export default function FormDialog() {
         </DialogActions>
       </Dialog>
       {Products.map((Product) => (
-          <Card className={classes.root}>
+         <Card key={Product.id} className={classes.root} onClick={()=>history.push(`/Product/${Product.id}`)}>
             <CardActionArea>
               <CardMedia
                 className={classes.photo}

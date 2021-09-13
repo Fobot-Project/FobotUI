@@ -1,10 +1,10 @@
-import React, { useEffect, useState,useRef } from "react";
-import '../../assets/css/login.css';
-import '../../assets/css/App.css';
+import React, { useEffect, useState, useRef } from "react";
+import "../../assets/css/login.css";
+import "../../assets/css/App.css";
 import { useHistory } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth, signInWithEmailAndPassword} from "../../firebase";
-import { Link } from "react-router-dom"
+import { auth, signInWithEmailAndPassword } from "../../firebase";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [userName, setUsername] = useState("");
@@ -13,22 +13,22 @@ export default function Login() {
   const [info, setInfo] = useState("");
   const [user, loading, error] = useAuthState(auth);
   const history = useHistory();
-
+  //useEffect(() => auth.onAuthStateChanged(email), [email]);
   async function handleReg() {
     const data = { password: password, email: email };
-    try{
-      await signInWithEmailAndPassword(email, password)
-      history.push('/restaurant')
-      } catch(err){
-      history.push('/')
+
+    try {
+      await signInWithEmailAndPassword(email, password);
+
+      history.push("/restaurant");
+    } catch (err) {
+      history.push("/");
     }
-    
+  }
+  function handleNavToLogin() {
+    history.push("/register");
   }
 
-  function handleNavToLogin(){
-    history.push('/register')
-  }
- 
   return (
     <div className="card">
       <div className="card--header ">
@@ -55,7 +55,7 @@ export default function Login() {
         </div>
       </div>
       <button onClick={handleReg} type="submit" id="login" class="btn_sign-up">
-       Log in
+        Log in
       </button>
       <p className="link">
         <a onClick={handleNavToLogin}>Register</a>

@@ -1,12 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 // import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import {BrowserRouter} from 'react-router-dom';
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter } from "react-router-dom";
 
-
-import './assets/css/style.css';
+import "./assets/css/style.css";
 
 // ReactDOM.render(
 //   <React.StrictMode>
@@ -16,10 +15,10 @@ import './assets/css/style.css';
 // );
 
 ReactDOM.render(
-  <BrowserRouter basename={'/chatbot'}>
+  <BrowserRouter basename={"/chatbot"}>
     <App />
   </BrowserRouter>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

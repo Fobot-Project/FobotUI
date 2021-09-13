@@ -1,5 +1,5 @@
 import React from 'react';
-import { auth, getcurrentuser} from "../../firebase";
+import { auth} from "../../firebase";
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -137,7 +137,7 @@ export default function PageSkeleton(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            {getcurrentuser()}
+            {auth.currentUser.displayName}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">

@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import PageSkeleton from "../../layouts/drawerHeader";
 import { makeStyles } from "@material-ui/core/styles";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -15,9 +15,14 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import { addRestaurant, db, getRestaurants} from "../../../firebase";
+import {
+  addRestaurant,
+  auth,
+  getRestaurants,
+  getcurrentuserId,
+} from "../../../firebase";
 import { useHistory } from "react-router-dom";
-import { storage } from "../../../firebase"
+import { storage } from "../../../firebase";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   photo: {
     height: 200,
-    width: 500
+    width: 500,
   },
 
   root: {
@@ -40,8 +45,6 @@ const useStyles = makeStyles((theme) => ({
   media: {
     height: 140,
   },
-
-  
 }));
 
 export default function FormDialog() {
@@ -52,22 +55,39 @@ export default function FormDialog() {
   const [image, setImage] = useState(null);
   const history = useHistory();
   // const {currentUser} = useAuthState()
-  const [restaurants, setRestaurants] = useState([])
-  
+  const [restaurants, setRestaurants] = useState([]);
+  const userId = getcurrentuserId();
   useEffect(() => {
-    getRestaurants().then(doc => {
-    setRestaurants(doc)
-  })
-  },[open] )
-  
-  
-  
-  
+    getRestaurants().then((doc) => {
+      setRestaurants(doc);
+    });
+  }, [open]);
+
   function handleAdd() {
+    const uploadTask = storage
+    .ref("users images/retaurants_images/" + image.name)
+    .put(image);
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {},
+    (error) => {
+      console.log(error);
+    },
+    () => {
+      storage
+        .ref("image")
+        .child(image.name)
+        .getDownloadURL()
+        .then((url) => {
+          console.log(url);
+        });
+    }
+  );
+
     if (name === "") {
       console.log("...");
     } else {
-      if (addRestaurant(name, address, phone)) {
+      if (addRestaurant(name, address, phone, userId)) {
         //添加成功
         console.log("成功");
         setOpen(false);
@@ -77,8 +97,8 @@ export default function FormDialog() {
     }
   }
   const handleAddProducts = () => {
-    history.push('/addProduct')
-  }
+    history.push("/addProduct");
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -87,37 +107,35 @@ export default function FormDialog() {
     setOpen(false);
   };
 
-  const handleChange = e => {
-    if (e.target.files[0]){
+  const handleChange = (e) => {
+    if (e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   };
 
-  const handleUpload = () =>{
-    const uploadTask = storage.ref('users images/retaurants_images').put(image);
-    uploadTask.on(
-      "state_changed",
-      snapshot => {},
-      error => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("image")
-          .child(image.name)
-          .getDownloadURL()
-          .then(url => {
-            console.log(url);
-          }
+  // const handleUpload = () => {
+  //   const uploadTask = storage
+  //     .ref("users images/retaurants_images/" + image.name)
+  //     .put(image);
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {},
+  //     (error) => {
+  //       console.log(error);
+  //     },
+  //     () => {
+  //       storage
+  //         .ref("image")
+  //         .child(image.name)
+  //         .getDownloadURL()
+  //         .then((url) => {
+  //           console.log(url);
+  //         });
+  //     }
+  //   );
+  // };
 
-          );
-      }
-    );
-  };
-
-  console.log("image: ",image)
-
-
+  console.log("image: ", image);
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const content = () => {
@@ -181,11 +199,8 @@ export default function FormDialog() {
               }}
             />
 
-            <input type = "file" onChange={handleChange}/>
-            <Button onClick = {handleUpload}>Upload</Button>
-
-
-            
+            <input type="file" onChange={handleChange} />
+            {/* <Button onClick={handleUpload}>Upload</Button> */}
           </DialogContent>
 
           <DialogActions>
@@ -198,7 +213,7 @@ export default function FormDialog() {
           </DialogActions>
         </Dialog>
         {restaurants.map((restaurant) => (
-          <Card className={classes.root}>
+          <Card key={restaurant.id} className={classes.root} onClick={()=>history.push(`/restaurant/${restaurant.id}`)}>
             <CardActionArea>
               <CardMedia
                 className={classes.photo}
@@ -206,7 +221,7 @@ export default function FormDialog() {
                 alt={restaurant.name}
                 //alt={firebase-image}
                 height="140"
-                image= "https://picsum.photos/200/300"  //{restaurant.url}
+                image="https://picsum.photos/200/300" //{restaurant.url}
                 title={restaurant.name}
               />
               <CardContent>
@@ -215,23 +230,21 @@ export default function FormDialog() {
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
                   {restaurant.address}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
                   {restaurant.phonenum}
                 </Typography>
               </CardContent>
-              
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary" onClick={handleAddProducts}>
+              {/* <Button size="small" color="primary" onClick={handleAddProducts}>
                 add product
-              </Button>
+              </Button> */}
               <Button size="small" color="primary">
                 Learn More
               </Button>
             </CardActions>
           </Card>
-          
         ))}
       </div>
     );

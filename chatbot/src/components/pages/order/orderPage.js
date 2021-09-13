@@ -1,36 +1,31 @@
-import React from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Chart from './chart';
-import Deposits from './deposits.js';
-import Orders from './orders';
-
-
+import React from "react";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Chart from "./chart";
+import Deposits from "./deposits.js";
+import Orders from "./orders";
+import PageSkeleton from "../../layouts/drawerHeader";
 
 const useStyles = makeStyles((theme) => ({
-
-
   paper: {
     padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,
   },
 }));
 
-
 export default function OrderPage() {
-  
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  return (
-    <Grid container spacing={3}>
+  const content = () => {
+    return (<Grid container spacing={3}>
       {/* Chart */}
       <Grid item xs={12} md={8} lg={9}>
         <Paper className={fixedHeightPaper}>
@@ -49,6 +44,9 @@ export default function OrderPage() {
           <Orders />
         </Paper>
       </Grid>
-    </Grid>
-);
+    </Grid>)
+    
+  };
+
+  return <PageSkeleton content={content} />;
 }
