@@ -93,26 +93,32 @@ export default function FormDialog() {
     setCatagory(event.target.value);
   };
 
+  const handleChangeimg = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
   const handleAdd = () => {
-    // const uploadTask = storage
-    //   .ref(`users images/m_images/${image.name}`)
-    //   .put(image);
-    // uploadTask.on(
-    //   "state_changed",
-    //   (snapshot) => {},
-    //   (error) => {
-    //     console.log(error);
-    //   },
-    //   () => {
-    //     storage
-    //       .ref("image")
-    //       .child(image.name)
-    //       .getDownloadURL()
-    //       .then((url) => {
-    //         console.log(url);
-    //       });
-    //   }
-    // );
+    const uploadTask = storage
+      .ref(`users images/menu_images/${image.name}`)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("image")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            console.log(url);
+          });
+      }
+    );
 
     if (name === "") {
       console.log("...");
@@ -229,11 +235,7 @@ export default function FormDialog() {
             />
 
             <label>Product Image</label>
-            <input type="file" name="file" id="fileButton" />
-            {/* <progress value="0" max="100" id="uploader">0%</progress> */}
-            {/* <input type="submit" value="上传"/> */}
-            {/* <input type="file" onChange={handleChange}/>
-          <Button onClick={handleupload}>upload</Button> */}
+            <input type="file" onChange={handleChangeimg} />
           </DialogContent>
 
           <DialogActions>

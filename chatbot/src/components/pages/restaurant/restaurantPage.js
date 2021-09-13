@@ -113,27 +113,27 @@ export default function FormDialog() {
     }
   };
 
-  const handleUpload = () => {
-    const uploadTask = storage
-      .ref("users images/retaurants_images/" + image.name)
-      .put(image);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("image")
-          .child(image.name)
-          .getDownloadURL()
-          .then((url) => {
-            console.log(url);
-          });
-      }
-    );
-  };
+  // const handleUpload = () => {
+  //   const uploadTask = storage
+  //     .ref("users images/retaurants_images/" + image.name)
+  //     .put(image);
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {},
+  //     (error) => {
+  //       console.log(error);
+  //     },
+  //     () => {
+  //       storage
+  //         .ref("image")
+  //         .child(image.name)
+  //         .getDownloadURL()
+  //         .then((url) => {
+  //           console.log(url);
+  //         });
+  //     }
+  //   );
+  // };
 
   console.log("image: ", image);
   const classes = useStyles();
@@ -200,7 +200,7 @@ export default function FormDialog() {
             />
 
             <input type="file" onChange={handleChange} />
-            <Button onClick={handleUpload}>Upload</Button>
+            {/* <Button onClick={handleUpload}>Upload</Button> */}
           </DialogContent>
 
           <DialogActions>
