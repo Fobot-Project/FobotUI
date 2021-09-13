@@ -43,7 +43,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
-        if (errorCode == "auth/weak-password") {
+        if (errorCode === "auth/weak-password") {
           alert("The password is too weak.");
         } else {
           alert(errorMessage);
@@ -62,11 +62,11 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     await db
       .collection("User")
       .doc(user.uid)
-      // .collection("Restaurants")
-      // .doc("Empty")
-      // .set({
-      //   status: "empty",
-      // });
+      .collection("restaurants")
+      .doc("Empty")
+      .set({
+        status: "empty",
+      });
     return auth.currentUser.updateProfile({
       displayName: name,
     });
@@ -91,7 +91,7 @@ const logout = () => {
   auth.signOut();
 };
 
-const addRestaurant = async (name, address, phonenum,uid,rid) => {
+const addRestaurant = async (name, address, phonenum, userID) => {
   if (!name) {
     alert("Name is empty!");
     return false;
@@ -104,7 +104,7 @@ const addRestaurant = async (name, address, phonenum,uid,rid) => {
       address: address,
       phonenum: phonenum,
     };
-    await db.collection("User").doc(uid).collection("Restaurants").doc(rid).add(data);
+    await db.collection("User").doc(userID).collection("Restaurants").add(data);
     return true;
   } catch (err) {
     console.error(err);
@@ -113,7 +113,7 @@ const addRestaurant = async (name, address, phonenum,uid,rid) => {
   }
 };
 
-const addProduct = async (name, price, description, Catagory,uid,rid,mid) => {
+const addProduct = async (name, price, description, Catagory, userID, RID) => {
   if (!name) {
     alert("Name is empty!");
     return false;
@@ -127,11 +127,10 @@ const addProduct = async (name, price, description, Catagory,uid,rid,mid) => {
     };
     await db
       .collection("User")
-      .doc(uid)
+      .doc(userID)
       .collection("Restaurants")
-      .doc(rid)
+      .doc(RID)
       .collection("Menu")
-      .doc(mid)
       .add(data);
     return true;
   } catch (err) {
@@ -146,12 +145,8 @@ const getcurrentuser = () => {
 const getcurrentuserId = () => {
   return auth.currentUser.uid;
 };
-// const getcurrentrestaurantId = () => {
-//   return auth.currentRestaurant.rid;
-// };
 
 // real-time listener getRestaurants
-
 export const getRestaurants = () => {
   return new Promise((resolve, reject) => {
     firestore
@@ -165,6 +160,23 @@ export const getRestaurants = () => {
   });
 };
 
+const getcurrentRestaurantId = (rid) => {
+  return new Promise((res, rej) => {
+    firestore
+      .collection("User")
+      .doc(getcurrentuserId())
+      .collection("Restaurants")
+      .get()
+      .then((s) => {
+        s.forEach((doc) => {
+          if (doc.data().id === rid) {
+            console.log(`${doc.id}`);
+            res(doc.id);
+          }
+        });
+      }, rej);
+  });
+};
 const getRestaurantById = (id) => {
   return new Promise((resolve, reject) => {
     firestore
@@ -185,14 +197,24 @@ const getRestaurantById = (id) => {
 };
 
 // real-time listener getProducts
-export const getProducts = () => {
+export const getProducts = (rid) => {
+  console.log(`${rid}: ${typeof rid}`);
+  if(!rid) {
+    setTimeout(()=>{},100)
+  } 
   return new Promise((resolve, reject) => {
-    firestore.collection("Products").onSnapshot((snapshot) => {
-      console.log("Received doc snapshot: ${docSnapshot}");
-      let updatedData = snapshot.docs.map((doc) => doc.data());
-      resolve(updatedData);
-    }, reject);
+    firestore
+      .collection("User")
+      .doc(getcurrentuserId())
+      .collection("Restaurants")
+      .doc(rid)
+      .collection("Menu")
+      .onSnapshot((snapshot) => {
+        let updatedData = snapshot.docs.map((doc) => doc.data());
+        resolve(updatedData);
+      }, reject);
   });
+    
 };
 
 export {
@@ -204,9 +226,7 @@ export {
   addRestaurant,
   logout,
   getcurrentuserId,
-  getRestaurantById,
   getcurrentuser,
+  getcurrentRestaurantId,
   addProduct,
-  // getcurrentrestaurantId,
-  
 };

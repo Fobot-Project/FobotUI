@@ -23,7 +23,7 @@ import {
 } from "../../../firebase";
 import { useHistory } from "react-router-dom";
 import { storage } from "../../../firebase";
-
+import useProtectedRoute from "../../../useProtectedRoute";
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -57,32 +57,35 @@ export default function FormDialog() {
   // const {currentUser} = useAuthState()
   const [restaurants, setRestaurants] = useState([]);
   const userId = getcurrentuserId();
+  console.log(restaurants);
+
   useEffect(() => {
     getRestaurants().then((doc) => {
       setRestaurants(doc);
+      console.log(doc);
     });
   }, [open]);
 
-  function handleAdd() {
+  const handleAdd = () => {
     const uploadTask = storage
-    .ref("users images/retaurants_images/" + image.name)
-    .put(image);
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {},
-    (error) => {
-      console.log(error);
-    },
-    () => {
-      storage
-        .ref("image")
-        .child(image.name)
-        .getDownloadURL()
-        .then((url) => {
-          console.log(url);
-        });
-    }
-  );
+      .ref("users images/retaurants_images/" + image.name)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("image")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            console.log(url);
+          });
+      }
+    );
 
     if (name === "") {
       console.log("...");
@@ -95,9 +98,6 @@ export default function FormDialog() {
         console.log(console.log("添加失败！"));
       }
     }
-  }
-  const handleAddProducts = () => {
-    history.push("/addProduct");
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -113,27 +113,27 @@ export default function FormDialog() {
     }
   };
 
-  // const handleUpload = () => {
-  //   const uploadTask = storage
-  //     .ref("users images/retaurants_images/" + image.name)
-  //     .put(image);
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {},
-  //     (error) => {
-  //       console.log(error);
-  //     },
-  //     () => {
-  //       storage
-  //         .ref("image")
-  //         .child(image.name)
-  //         .getDownloadURL()
-  //         .then((url) => {
-  //           console.log(url);
-  //         });
-  //     }
-  //   );
-  // };
+  const handleUpload = () => {
+    const uploadTask = storage
+      .ref("users images/retaurants_images/" + image.name)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("image")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            console.log(url);
+          });
+      }
+    );
+  };
 
   console.log("image: ", image);
   const classes = useStyles();
@@ -200,7 +200,7 @@ export default function FormDialog() {
             />
 
             <input type="file" onChange={handleChange} />
-            {/* <Button onClick={handleUpload}>Upload</Button> */}
+            <Button onClick={handleUpload}>Upload</Button>
           </DialogContent>
 
           <DialogActions>
@@ -213,7 +213,11 @@ export default function FormDialog() {
           </DialogActions>
         </Dialog>
         {restaurants.map((restaurant) => (
-          <Card key={restaurant.id} className={classes.root} onClick={()=>history.push(`/restaurant/${restaurant.id}`)}>
+          <Card
+            key={restaurant.id}
+            className={classes.root}
+            onClick={() => history.push(`/restaurant/${restaurant.id}`)}
+          >
             <CardActionArea>
               <CardMedia
                 className={classes.photo}
@@ -249,6 +253,6 @@ export default function FormDialog() {
       </div>
     );
   };
-
+  useProtectedRoute();
   return <PageSkeleton content={content} />;
 }

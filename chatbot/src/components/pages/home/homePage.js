@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -16,22 +16,30 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
-import RestaurantIcon from '@material-ui/icons/Restaurant';
-import FastfoodIcon from '@material-ui/icons/Fastfood';
+import PeopleIcon from "@material-ui/icons/People";
+import BarChartIcon from "@material-ui/icons/BarChart";
+import LayersIcon from "@material-ui/icons/Layers";
+import RestaurantIcon from "@material-ui/icons/Restaurant";
+import FastfoodIcon from "@material-ui/icons/Fastfood";
 
 import OrderPage from "../order/orderPage";
 import BookingPage from "../booking/bookingPage";
-
-import { BrowserRouter as Router, Switch, Route, Link, useRouteMatch, useParams} from "react-router-dom";
+import useProtectedRoute from "../../../useProtectedRoute";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useParams,
+} from "react-router-dom";
 
 function Copyright() {
+  useProtectedRoute()
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
@@ -173,79 +181,79 @@ export default function HomePage(props) {
         </Toolbar>
       </AppBar>
       <Router>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-          <div>
-          <Link to="/home" style={{ textDecoration: 'none' }}>
-            <ListItem button>
-                <ListItemIcon>
-                <RestaurantIcon />
-              </ListItemIcon>
-              <ListItemText primary="Restaurants" />
-            </ListItem>
-            </Link>
-            <Link to="/order" style={{ textDecoration: 'none' }}>
-            <ListItem button>
-              <ListItemIcon>
-                <FastfoodIcon />
-              </ListItemIcon>
-              <ListItemText primary="Orders" />
-            </ListItem>
-            </Link>
-            <Link to="/booking" style={{ textDecoration: 'none' }}>
-            <ListItem button>
-              <ListItemIcon>
-                <PeopleIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bookings" />
-            </ListItem>
-            </Link>
-            <ListItem button>
-              <ListItemIcon>
-                <BarChartIcon />
-              </ListItemIcon>
-              <ListItemText primary="Reports" />
-            </ListItem>
-            <ListItem button>
-              <ListItemIcon>
-                <LayersIcon />
-              </ListItemIcon>
-              <ListItemText primary="Integrations" />
-            </ListItem>
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+          }}
+          open={open}
+        >
+          <div className={classes.toolbarIcon}>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
           </div>
-        </List>
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-        <Switch>
-        <Route exact path={path}>
-          <h3>Home</h3>
-        </Route>
-        <Route exact path="/order">
-          <OrderPage />
-        </Route>
-        <Route exact path="/booking">
-          <BookingPage />
-        </Route>
-      </Switch>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>
-      </main>
+          <Divider />
+          <List>
+            <div>
+              <Link to="/home" style={{ textDecoration: "none" }}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <RestaurantIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Restaurants" />
+                </ListItem>
+              </Link>
+              <Link to="/order" style={{ textDecoration: "none" }}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FastfoodIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Orders" />
+                </ListItem>
+              </Link>
+              <Link to="/booking" style={{ textDecoration: "none" }}>
+                <ListItem button>
+                  <ListItemIcon>
+                    <PeopleIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Bookings" />
+                </ListItem>
+              </Link>
+              <ListItem button>
+                <ListItemIcon>
+                  <BarChartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Reports" />
+              </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <LayersIcon />
+                </ListItemIcon>
+                <ListItemText primary="Integrations" />
+              </ListItem>
+            </div>
+          </List>
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Switch>
+              <Route exact path={path}>
+                <h3>Home</h3>
+              </Route>
+              <Route exact path="/order">
+                <OrderPage />
+              </Route>
+              <Route exact path="/booking">
+                <BookingPage />
+              </Route>
+            </Switch>
+            <Box pt={4}>
+              <Copyright />
+            </Box>
+          </Container>
+        </main>
       </Router>
     </div>
   );
