@@ -146,11 +146,12 @@ const getcurrentuser = () => {
 const getcurrentuserId = () => {
   return auth.currentUser.uid;
 };
-const getcurrentrestaurantId = () => {
-  return auth.currentRestaurant.rid;
-};
+// const getcurrentrestaurantId = () => {
+//   return auth.currentRestaurant.rid;
+// };
 
 // real-time listener getRestaurants
+
 export const getRestaurants = () => {
   return new Promise((resolve, reject) => {
     firestore
@@ -206,6 +207,6 @@ export {
   getRestaurantById,
   getcurrentuser,
   addProduct,
-  getcurrentrestaurantId,
+  // getcurrentrestaurantId,
   
 };
