@@ -1,7 +1,7 @@
-import clsx from "clsx";
+// import clsx from "clsx";
 import PageSkeleton from "../../layouts/drawerHeader";
 import { makeStyles } from "@material-ui/core/styles";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
 
 import Card from "@material-ui/core/Card";
@@ -20,15 +20,15 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   fixedHeight: {
-    height: '100%',
+    height: "100%",
   },
   photo: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
   },
 
   root: {
-    maxWidth: '500px',
+    maxWidth: "500px",
   },
   media: {
     height: 140,
@@ -36,21 +36,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function FormDialog() {
-  const [open, setOpen] = useState(false);
-  const [image, setImage] = useState(null);
-  const [restaurant, setRestaurant] = useState();
   const history = useHistory();
-  // const {currentUser} = useAuthState()
+
   const { id } = useParams();
-  console.log(id);
 
   const handleAddProducts = () => {
     history.push(`/restaurant/addProduct/${id}`);
-    // history.push("/order")
   };
 
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const content = () => {
     return (
       <div>

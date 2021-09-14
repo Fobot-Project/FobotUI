@@ -8,20 +8,20 @@ import RestaurantPage from "./components/pages/restaurant/restaurantPage";
 import SingleRestaurantPage from "./components/pages/restaurant/singleRestaurantPage";
 import AddproductPage from "./components/pages/addproduct/addproductPage";
 import { createBrowserHistory } from "history";
-import { auth } from "./firebase";
 // import './App.css';
-import React, { useState, useEffect } from "react";
+
+import React from "react";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect,
-  useParams,
 } from "react-router-dom";
+
 
 const history = createBrowserHistory();
 function App() {
-  
+
+
   return (
     <div className="App">
       <Router history={history}>

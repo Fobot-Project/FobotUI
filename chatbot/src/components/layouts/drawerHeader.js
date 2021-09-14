@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { auth} from "../../firebase";
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -115,13 +115,22 @@ const useStyles = makeStyles((theme) => ({
 export default function PageSkeleton(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [name, setName] = useState("");
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        setName(authObj.displayName)
+      } else {
+      }
+    });
+  }, []);
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -137,7 +146,7 @@ export default function PageSkeleton(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            {auth.currentUser.displayName}
+            {name}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">

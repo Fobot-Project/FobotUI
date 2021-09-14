@@ -53,19 +53,33 @@ export default function FormDialog() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [image, setImage] = useState(null);
+  const [userId, setUserId] = useState("");
   const history = useHistory();
   // const {currentUser} = useAuthState()
   const [restaurants, setRestaurants] = useState([]);
-  const userId = getcurrentuserId();
-  console.log(restaurants);
 
   useEffect(() => {
-    getRestaurants().then((doc) => {
-      setRestaurants(doc);
-      console.log(doc);
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        setUserId(auth.currentUser.uid);
+        getRestaurants().then((doc) => {
+          setRestaurants(doc);
+        });
+      } else {
+      }
     });
   }, [open]);
-
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+        
+  //     } else {
+  //       // User is signed out
+  //       // ...
+  //     }
+  //   });
+  // }, [open]);
   const handleAdd = () => {
     const uploadTask = storage
       .ref("users images/retaurants_images/" + image.name)
@@ -113,27 +127,27 @@ export default function FormDialog() {
     }
   };
 
-  // const handleUpload = () => {
-  //   const uploadTask = storage
-  //     .ref("users images/retaurants_images/" + image.name)
-  //     .put(image);
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {},
-  //     (error) => {
-  //       console.log(error);
-  //     },
-  //     () => {
-  //       storage
-  //         .ref("image")
-  //         .child(image.name)
-  //         .getDownloadURL()
-  //         .then((url) => {
-  //           console.log(url);
-  //         });
-  //     }
-  //   );
-  // };
+  const handleUpload = () => {
+    const uploadTask = storage
+      .ref("users images/retaurants_images/" + image.name)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("image")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            console.log(url);
+          });
+      }
+    );
+  };
 
   console.log("image: ", image);
   const classes = useStyles();
@@ -200,7 +214,7 @@ export default function FormDialog() {
             />
 
             <input type="file" onChange={handleChange} />
-            {/* <Button onClick={handleUpload}>Upload</Button> */}
+
           </DialogContent>
 
           <DialogActions>

@@ -1,4 +1,4 @@
-import clsx from "clsx";
+// import clsx from "clsx";
 import PageSkeleton from "../../layouts/drawerHeader";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useState, useEffect } from "react";
@@ -15,16 +15,15 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import {
   addProduct,
-  storage,
   getProducts,
   getcurrentRestaurantId,
   auth,
+  storage
 } from "../../../firebase";
 import { useParams } from "react-router-dom";
 
@@ -70,33 +69,31 @@ export default function FormDialog() {
   const [description, setDescription] = useState("");
   // const {currentUser} = useAuthState()
   const [products, setProducts] = useState([]);
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const [restaurantId, setRestaurantId] = useState("");
   const { id } = useParams();
+  const [image, setImage] = useState(null);
   useEffect(() => {
-    getcurrentRestaurantId(id).then((doc) => {
-      console.log(doc, "here!!!");
-      setRestaurantId(doc);
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        getcurrentRestaurantId(id).then((doc) => {
+          setRestaurantId(doc);
+        });
+        if (restaurantId) {
+          getProducts(restaurantId).then((doc) => {
+            setProducts(doc);
+          });
+        }
+      } else {
+      }
     });
-  }, [id]);
-  useEffect(() => {
-    if (restaurantId) {
-      getProducts(restaurantId).then((doc) => {
-        setProducts(doc);
-      });
-    }
-  }, [restaurantId, open]);
-  console.log(products);
+  }, [restaurantId, id]);
+
   const [Catagory, setCatagory] = useState("");
 
   const handleChange = (event) => {
     setCatagory(event.target.value);
-  };
-
-  const handleChangeimg = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
   };
 
   const handleAdd = () => {
@@ -151,7 +148,7 @@ export default function FormDialog() {
   };
 
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const content = () => {
     return (
       <div>
@@ -235,7 +232,11 @@ export default function FormDialog() {
             />
 
             <label>Product Image</label>
-            <input type="file" onChange={handleChangeimg} />
+            <input type="file" name="file" id="fileButton" onInput={(e)=>setImage(e.target.files[0])}/>
+            {/* <progress value="0" max="100" id="uploader">0%</progress> */}
+            {/* <input type="submit" value="上传"/> */}
+            {/* <input type="file" onChange={handleChange}/>
+          <Button onClick={handleupload}>upload</Button> */}
           </DialogContent>
 
           <DialogActions>
@@ -248,7 +249,7 @@ export default function FormDialog() {
           </DialogActions>
         </Dialog>
         {products.map((product) => (
-          <Card className={classes.root}>
+          <Card key={product.id} className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.photo}

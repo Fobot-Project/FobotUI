@@ -15,7 +15,7 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 const defaultImage =
   "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
 const auth = app.auth();
@@ -143,7 +143,13 @@ const getcurrentuser = () => {
   return auth.currentUser.displayname;
 };
 const getcurrentuserId = () => {
-  return auth.currentUser.uid;
+  if (auth.currentUser.uid) {
+    return auth.currentUser.uid;
+  } else {
+    setTimeout(() => {
+      return auth.currentUser.uid;
+    }, 100);
+  }
 };
 
 // real-time listener getRestaurants
@@ -170,38 +176,33 @@ const getcurrentRestaurantId = (rid) => {
       .then((s) => {
         s.forEach((doc) => {
           if (doc.data().id === rid) {
-            console.log(`${doc.id}`);
             res(doc.id);
           }
         });
       }, rej);
   });
 };
-const getRestaurantById = (id) => {
-  return new Promise((resolve, reject) => {
-    firestore
-      .collection("User")
-      .doc(getcurrentuserId())
-      .collection("Restaurants")
-      .onSnapshot((snapshot) => {
-        let updatedData = snapshot.docs.map((doc) => doc.data());
-        let restaurant;
-        updatedData.forEach((e) => {
-          if (e.id === id) {
-            restaurant = e;
-          }
-        });
-        resolve(restaurant);
-      }, reject);
-  });
-};
+// const getRestaurantById = (id) => {
+//   return new Promise((resolve, reject) => {
+//     firestore
+//       .collection("User")
+//       .doc(getcurrentuserId())
+//       .collection("Restaurants")
+//       .onSnapshot((snapshot) => {
+//         let updatedData = snapshot.docs.map((doc) => doc.data());
+//         let restaurant;
+//         updatedData.forEach((e) => {
+//           if (e.id === id) {
+//             restaurant = e;
+//           }
+//         });
+//         resolve(restaurant);
+//       }, reject);
+//   });
+// };
 
 // real-time listener getProducts
 export const getProducts = (rid) => {
-  console.log(`${rid}: ${typeof rid}`);
-  if(!rid) {
-    setTimeout(()=>{},100)
-  } 
   return new Promise((resolve, reject) => {
     firestore
       .collection("User")
@@ -214,7 +215,6 @@ export const getProducts = (rid) => {
         resolve(updatedData);
       }, reject);
   });
-    
 };
 
 export {
