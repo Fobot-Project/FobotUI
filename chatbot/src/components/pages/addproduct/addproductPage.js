@@ -1,5 +1,4 @@
 // import clsx from "clsx";
-import PageSkeleton from "../../layouts/drawerHeader";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
@@ -149,8 +148,7 @@ export default function FormDialog() {
 
   const classes = useStyles();
   // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const content = () => {
-    return (
+  return (
       <div>
         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
           Add product
@@ -275,7 +273,4 @@ export default function FormDialog() {
         ))}
       </div>
     );
-  };
-
-  return <PageSkeleton content={content} />;
 }

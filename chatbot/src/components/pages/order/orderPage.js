@@ -6,7 +6,7 @@ import Paper from "@material-ui/core/Paper";
 import Chart from "./chart";
 import Deposits from "./deposits.js";
 import Orders from "./orders";
-import PageSkeleton from "../../layouts/drawerHeader";
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -24,8 +24,7 @@ export default function OrderPage() {
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  const content = () => {
-    return (<Grid container spacing={3}>
+    return <Grid container spacing={3}>
       {/* Chart */}
       <Grid item xs={12} md={8} lg={9}>
         <Paper className={fixedHeightPaper}>
@@ -44,9 +43,5 @@ export default function OrderPage() {
           <Orders />
         </Paper>
       </Grid>
-    </Grid>)
-    
-  };
-
-  return <PageSkeleton content={content} />;
+    </Grid>
 }

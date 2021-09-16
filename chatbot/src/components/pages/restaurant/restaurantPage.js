@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import PageSkeleton from "../../layouts/drawerHeader";
 import { makeStyles } from "@material-ui/core/styles";
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
@@ -152,7 +151,7 @@ export default function FormDialog() {
   console.log("image: ", image);
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const content = () => {
+  useProtectedRoute();
     return (
       <div>
         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
@@ -266,7 +265,5 @@ export default function FormDialog() {
         ))}
       </div>
     );
-  };
-  useProtectedRoute();
-  return <PageSkeleton content={content} />;
+  
 }

@@ -1,5 +1,4 @@
 // import clsx from "clsx";
-import PageSkeleton from "../../layouts/drawerHeader";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
 import Button from "@material-ui/core/Button";
@@ -46,8 +45,7 @@ export default function FormDialog() {
 
   const classes = useStyles();
   // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const content = () => {
-    return (
+  return (
       <div>
         <Card
           className={classes.root}
@@ -86,7 +84,4 @@ export default function FormDialog() {
         </Card>
       </div>
     );
-  };
-
-  return <PageSkeleton content={content} />;
 }

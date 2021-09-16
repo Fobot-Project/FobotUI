@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import PageSkeleton from '../../layouts/drawerHeader';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
@@ -20,13 +19,7 @@ export default function BookingPage() {
 
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const content = () => {
-    return (
-      <p>Booking</p>
-  );
-  };
-
   return(
-    <PageSkeleton content={content}/>
+    <p>Booking</p>
   );
 }
