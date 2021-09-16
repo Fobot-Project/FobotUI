@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
+
 import {
-  auth,
+
   registerWithEmailAndPassword,
 } from "../../firebase";
 
@@ -14,12 +14,12 @@ export default function Register() {
   const [c_password, setCPassowrd] = useState("");
   const [email, setEmail] = useState("");
   const [info, setInfo] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+
   var history = useHistory();
 
 
   function handleReg() {
-    const data = { userName: userName, password: password, email: email };
+
     if (userName === "" || password === "" || email === "") {
       setInfo("Please Fill All the Field!");
     }

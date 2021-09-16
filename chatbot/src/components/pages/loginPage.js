@@ -1,22 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "../../assets/css/login.css";
 import "../../assets/css/App.css";
 import { useHistory } from "react-router-dom";
-import { useAuthState } from "react-firebase-hooks/auth";
+
 import { auth, signInWithEmailAndPassword } from "../../firebase";
-import { Link } from "react-router-dom";
 
 export default function Login() {
-  const [userName, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [info, setInfo] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+
   const history = useHistory();
   //useEffect(() => auth.onAuthStateChanged(email), [email]);
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        // logged in, use authObj
+      } else {
+        handleReg()
+      }
+    });
+  }, []);
   async function handleReg() {
-    const data = { password: password, email: email };
+    if(auth.currentUser){
 
+    }
     try {
       await signInWithEmailAndPassword(email, password);
 

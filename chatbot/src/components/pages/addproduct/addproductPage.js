@@ -1,34 +1,44 @@
-import clsx from 'clsx';
-import PageSkeleton from '../../layouts/drawerHeader';
-import { makeStyles } from '@material-ui/core/styles';
-import React, {useState, useEffect} from "react";
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+// import clsx from "clsx";
+import PageSkeleton from "../../layouts/drawerHeader";
+import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import { addProduct, db, getProducts, getcurrentrestaurantId} from "../../../firebase";
-import { useHistory } from "react-router-dom";
-import { storage } from "../../../firebase";
+import {
+  addProduct,
+  getProducts,
+  getcurrentRestaurantId,
+  auth,
+  storage
+} from "../../../firebase";
+import { useParams } from "react-router-dom";
+
+// import {
+//   addProduct
+// } from "../../../firebase";
+
+// import {getRestaurants} from '../../../firebase';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,
@@ -42,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
   photo: {
     height: 200,
-    width: 500
+    width: 500,
   },
   root: {
     maxWidth: 500,
@@ -52,59 +62,74 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
-
 export default function FormDialog() {
   const [open, setOpen] = useState(false);
-  const [name, setName] =useState("");
-  const [price, setPrice] =useState("");
-  const [description, setDescription] =useState("");
-  const [image, setImage] = useState(null);
-  const [Catagory, setCatagory] = useState('');
-  const history = useHistory();
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [description, setDescription] = useState("");
   // const {currentUser} = useAuthState()
-  const [Products, setProducts] = useState([])
-  // const RestaurantId = getcurrentrestaurantId();
+  const [products, setProducts] = useState([]);
+  // const [image, setImage] = useState(null);
+  const [restaurantId, setRestaurantId] = useState("");
+  const { id } = useParams();
+  const [image, setImage] = useState(null);
   useEffect(() => {
-    getProducts().then(doc => {
-    setProducts(doc)
-  })
-  },[open] )
-  
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        getcurrentRestaurantId(id).then((doc) => {
+          setRestaurantId(doc);
+        });
+        if (restaurantId) {
+          getProducts(restaurantId).then((doc) => {
+            setProducts(doc);
+          });
+        }
+      } else {
+      }
+    });
+  }, [restaurantId, id]);
+
+  const [Catagory, setCatagory] = useState("");
+
   const handleChange = (event) => {
     setCatagory(event.target.value);
   };
 
-  function handleAdd(){
+  const handleAdd = () => {
     const uploadTask = storage
-    .ref("users images/retaurants_images/Menu_images" + image.name)
-    .put(image);
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {},
-    (error) => {
-      console.log(error);
-    },
-    () => {
-      storage
-        .ref("image")
-        .child(image.name)
-        .getDownloadURL()
-        .then((url) => {
-          console.log(url);
-        });
-    }
-  );
+      .ref(`users images/menu_images/${image.name}`)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {},
+      (error) => {
+        console.log(error);
+      },
+      () => {
+        storage
+          .ref("image")
+          .child(image.name)
+          .getDownloadURL()
+          .then((url) => {
+            console.log(url);
+          });
+      }
+    );
 
-    if(name===""){
-      console.log(
-        "..."
-      )
-    }else{
-      if(addProduct(name,price,description,Catagory
-        // ,RestaurantId
-        )){
+    if (name === "") {
+      console.log("...");
+    } else {
+      if (
+        addProduct(
+          name,
+          price,
+          description,
+          Catagory,
+          auth.currentUser.uid,
+          restaurantId
+        )
+      ) {
         //添加成功
         console.log("成功");
         setOpen(false);
@@ -112,8 +137,7 @@ export default function FormDialog() {
         console.log(console.log("添加失败！"));
       }
     }
-  
-  }
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -123,142 +147,135 @@ export default function FormDialog() {
     setOpen(false);
   };
 
-  const handleChangeimg = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
-    }
-  };
-
-  console.log("image: ", image);
-
   const classes = useStyles();
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+  // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const content = () => {
-
     return (
-        
       <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Add product
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Add product information</DialogTitle>
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          Add product
+        </Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">
+            Add product information
+          </DialogTitle>
 
-        <DialogContent>
+          <DialogContent>
+            <DialogContentText>
+              Please enter the basic information of your product
+            </DialogContentText>
 
-          <DialogContentText>
-           Please enter the basic information of your product
-          </DialogContentText>
+            <TextField
+              // margin="dense"
+              name="Product name"
+              required
+              fullWidth
+              multiline
+              id="Product name"
+              label="Product name"
+              autoFocus
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+            />
 
-          <TextField
-            // margin="dense"
-            name="Product name"
-            required
-            fullWidth
-            multiline
-            id="Product name"
-            label="Product name"
-            autoFocus
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-helper-label">
+                Catagory
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-helper-label"
+                id="demo-simple-select-helper"
+                value={Catagory}
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value="vegetable">Vegetable</MenuItem>
+                <MenuItem value="meat">Meat</MenuItem>
+                <MenuItem value="dessert">Dessert</MenuItem>
+                <MenuItem value="drink">Drink</MenuItem>
+              </Select>
+            </FormControl>
 
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-simple-select-helper-label">Catagory</InputLabel>
-        <Select
-            labelId="demo-simple-select-helper-label"
-            id="demo-simple-select-helper"
-            value={Catagory}
-            onChange={handleChange}
-            >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="vegetable">Vegetable</MenuItem>
-          <MenuItem value="meat">Meat</MenuItem>
-          <MenuItem value="dessert">Dessert</MenuItem>
-          <MenuItem value="drink">Drink</MenuItem>
-        </Select>
-      </FormControl>
+            <TextField
+              autoFocus
+              required
+              multiline
+              margin="dense"
+              name="Price"
+              id="Price"
+              label="Price"
+              fullWidth
+              onChange={(e) => {
+                setPrice(e.target.value);
+              }}
+            />
 
-          <TextField
-            autoFocus
-            required
-            multiline
-            margin="dense"
-            name="Price"
-            id="Price"
-            label="Price"
-            fullWidth
-            onChange={(e) => {
-              setPrice(e.target.value);
-            }}
-          />
+            <TextField
+              autoFocus
+              required
+              multiline
+              margin="dense"
+              name="Description"
+              id="Description"
+              label="Description"
+              fullWidth
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
 
-         <TextField
-            autoFocus
-            required
-            multiline
-            margin="dense"
-            name="Description"
-            id="Description"
-            label="Description"
-            fullWidth
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-          />
+            <label>Product Image</label>
+            <input type="file" name="file" id="fileButton" onInput={(e)=>setImage(e.target.files[0])}/>
+            {/* <progress value="0" max="100" id="uploader">0%</progress> */}
+            {/* <input type="submit" value="上传"/> */}
+            {/* <input type="file" onChange={handleChange}/>
+          <Button onClick={handleupload}>upload</Button> */}
+          </DialogContent>
 
-          <label>Product Image</label>
-          <input type="file" onChange={handleChangeimg} />
-
-        </DialogContent>
-
-
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleAdd} color="primary">
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {Products.map((Product) => (
-         <Card key={Product.id} className={classes.root} onClick={()=>history.push(`/Product/${Product.id}`)}>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleAdd} color="primary">
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+        {products.map((product) => (
+          <Card key={product.id} className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.photo}
                 component="img"
-                alt={Product.name}
+                alt={product.name}
                 height="140"
-                image= "https://picsum.photos/200/300"  //{Product.url}
-                title={Product.name}
+                image="https://picsum.photos/200/300" //{Product.url}
+                title={product.name}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                  {Product.name}
+                  {product.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  {Product.price}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                  {Product.description}
+                  {"$ " + product.price}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p">
+                  {product.description}
                 </Typography>
               </CardContent>
-              
             </CardActionArea>
-
           </Card>
-          
         ))}
-    </div>
+      </div>
     );
   };
 
-  return(
-    <PageSkeleton content={content}/>
-  );
-
+  return <PageSkeleton content={content} />;
 }
