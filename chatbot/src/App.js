@@ -11,17 +11,10 @@ import { createBrowserHistory } from "history";
 // import './App.css';
 
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 const history = createBrowserHistory();
 function App() {
-
-
   return (
     <div className="App">
       <Router history={history}>
@@ -38,7 +31,11 @@ function App() {
             path="/restaurant/:id"
             component={SingleRestaurantPage}
           />
-          <Route exact path="/restaurant/addProduct/:id" component={AddproductPage} />
+          <Route
+            exact
+            path="/restaurant/addProduct/:id"
+            component={AddproductPage}
+          />
         </Switch>
       </Router>
     </div>
