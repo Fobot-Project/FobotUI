@@ -15,7 +15,8 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
+const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig): firebase.app();
+
 const defaultImage =
   "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
 const auth = app.auth();
@@ -91,7 +92,7 @@ const logout = () => {
   auth.signOut();
 };
 
-const addRestaurant = async (name, address, phonenum, userID) => {
+const addRestaurant = async (name, address, phonenum, userID, url) => {
   if (!name) {
     alert("Name is empty!");
     return false;
@@ -103,6 +104,7 @@ const addRestaurant = async (name, address, phonenum, userID) => {
       name: name,
       address: address,
       phonenum: phonenum,
+      imageUrl: url
     };
     await db.collection("User").doc(userID).collection("Restaurants").add(data);
     return true;
@@ -113,7 +115,7 @@ const addRestaurant = async (name, address, phonenum, userID) => {
   }
 };
 
-const addProduct = async (name, price, description, Catagory, userID, RID) => {
+const addProduct = async (name, price, description, Catagory, userID, RID, url) => {
   if (!name) {
     alert("Name is empty!");
     return false;
@@ -124,6 +126,7 @@ const addProduct = async (name, price, description, Catagory, userID, RID) => {
       price: price,
       description: description,
       Catagory: Catagory,
+      imageUrl: url
     };
     await db
       .collection("User")
@@ -182,24 +185,24 @@ const getcurrentRestaurantId = (rid) => {
       }, rej);
   });
 };
-// const getRestaurantById = (id) => {
-//   return new Promise((resolve, reject) => {
-//     firestore
-//       .collection("User")
-//       .doc(getcurrentuserId())
-//       .collection("Restaurants")
-//       .onSnapshot((snapshot) => {
-//         let updatedData = snapshot.docs.map((doc) => doc.data());
-//         let restaurant;
-//         updatedData.forEach((e) => {
-//           if (e.id === id) {
-//             restaurant = e;
-//           }
-//         });
-//         resolve(restaurant);
-//       }, reject);
-//   });
-// };
+const getUrlById = (id) => {
+  return new Promise((resolve, reject) => {
+    firestore
+      .collection("User")
+      .doc(getcurrentuserId())
+      .collection("Restaurants")
+      .onSnapshot((snapshot) => {
+        let updatedData = snapshot.docs.map((doc) => doc.data());
+        let url;
+        updatedData.forEach((e) => {
+          if (e.id === id) {
+            url = e.imageUrl
+          }
+        });
+        resolve(url);
+      }, reject);
+  });
+};
 
 // real-time listener getProducts
 export const getProducts = (rid) => {
@@ -229,4 +232,5 @@ export {
   getcurrentuser,
   getcurrentRestaurantId,
   addProduct,
+  getUrlById
 };

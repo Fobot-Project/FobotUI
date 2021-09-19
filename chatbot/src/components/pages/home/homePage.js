@@ -28,7 +28,6 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 
 import OrderPage from "../order/orderPage";
 import BookingPage from "../booking/bookingPage";
-import useProtectedRoute from "../../../useProtectedRoute";
 import {
   BrowserRouter as Router,
   Switch,
@@ -39,7 +38,6 @@ import {
 } from "react-router-dom";
 
 function Copyright() {
-  useProtectedRoute()
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
