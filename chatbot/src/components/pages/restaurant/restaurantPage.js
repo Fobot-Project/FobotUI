@@ -51,6 +51,7 @@ export default function FormDialog() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [image, setImage] = useState(null);
+  const [uploadedImageUrl, setuploadedImageUrl] = useState("");
   const [userId, setUserId] = useState("");
   const history = useHistory();
   // const {currentUser} = useAuthState()
@@ -95,6 +96,7 @@ export default function FormDialog() {
           .getDownloadURL()
           .then((url) => {
             console.log(url);
+            setuploadedImageUrl(url)
           });
       }
     );
@@ -102,12 +104,12 @@ export default function FormDialog() {
     if (name === "") {
       console.log("...");
     } else {
-      if (addRestaurant(name, address, phone, userId)) {
+      if (addRestaurant(name, address, phone, userId, uploadedImageUrl)) {
         //添加成功
         console.log("成功");
         setOpen(false);
       } else {
-        console.log(console.log("添加失败！"));
+        console.log("添加失败！");
       }
     }
   };

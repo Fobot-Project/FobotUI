@@ -30,6 +30,11 @@ import OrderPage from "../order/orderPage";
 import BookingPage from "../booking/bookingPage";
 import ReportPage from "../report/reportPage";
 import RestaurantPage from "../restaurant/restaurantPage";
+import SingleRestaurantPage from "../restaurant/singleRestaurantPage";
+import RestaurantBookingPage from "../booking/restaurantBookingPage";
+import RestaurantOrderPage from "../order/restaurantOrderPage";
+import RestaurantChatbotPage from "../chatbot/restaurantChatbotPage";
+import FormDialog from "../restaurant/restaurantPage";
 import {
   BrowserRouter as Router,
   Switch,
@@ -260,6 +265,28 @@ export default function HomePage(props) {
               <Route exact path="/report">
                 <ReportPage />
               </Route>
+              <Route
+                exact
+                path="/restaurant/:id"
+                component={SingleRestaurantPage}
+              />
+              <Route
+              exact
+              path="/restaurant/:id/addproduct"
+              component={FormDialog} />
+              <Route
+              exact
+              path="/restaurant/:id/order"
+              component={RestaurantOrderPage} />
+              <Route
+              exact
+              path="/restaurant/:id/booking"
+              component={RestaurantBookingPage} />
+              <Route
+              exact
+              path="/restaurant/:id/chatbot"
+              component={RestaurantChatbotPage} />
+
             </Switch>
             <Box pt={4}>
               <Copyright />

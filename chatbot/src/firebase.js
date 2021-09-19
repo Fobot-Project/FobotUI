@@ -106,7 +106,17 @@ const addRestaurant = async (name, address, phonenum, userID, url) => {
       phonenum: phonenum,
       imageUrl: url
     };
-    await db.collection("User").doc(userID).collection("Restaurants").add(data);
+    const defaultItem = {
+      name: "Empty"
+    }
+
+    await db.collection("User").doc(userID).collection("Restaurants").add(data)
+    .then(
+      function(docRef) {
+        // Initialised the 'Menu' and 'Order' collection for the restaurants
+        docRef.collection("Menu").add(defaultItem)
+        // docRef.collection("Order").add(defaultItem)
+      });
     return true;
   } catch (err) {
     console.error(err);
