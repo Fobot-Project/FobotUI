@@ -22,7 +22,7 @@ import {
   getProducts,
   getcurrentRestaurantId,
   auth,
-  storage
+  storage,
 } from "../../../firebase";
 import { useParams } from "react-router-dom";
 
@@ -72,6 +72,7 @@ export default function FormDialog() {
   const [restaurantId, setRestaurantId] = useState("");
   const { id } = useParams();
   const [image, setImage] = useState(null);
+  const [url, setUrl] = useState("");
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((authObj) => {
       unsub();
@@ -87,7 +88,7 @@ export default function FormDialog() {
       } else {
       }
     });
-  }, [restaurantId, id]);
+  }, [restaurantId, id, open]);
 
   const [Catagory, setCatagory] = useState("");
 
@@ -97,7 +98,7 @@ export default function FormDialog() {
 
   const handleAdd = () => {
     const uploadTask = storage
-      .ref(`users images/menu_images/${image.name}`)
+      .ref(`users_images/menu_images/${image.name}`)
       .put(image);
     uploadTask.on(
       "state_changed",
@@ -107,35 +108,36 @@ export default function FormDialog() {
       },
       () => {
         storage
-          .ref("image")
+          .ref("users_images/menu_images")
           .child(image.name)
           .getDownloadURL()
           .then((url) => {
             console.log(url);
+            setUrl(url);
+            if (name === "") {
+              console.log("...");
+            } else {
+              if (
+                addProduct(
+                  name,
+                  price,
+                  description,
+                  Catagory,
+                  auth.currentUser.uid,
+                  restaurantId,
+                  url
+                )
+              ) {
+                //添加成功
+                console.log("成功");
+                setOpen(false);
+              } else {
+                console.log(console.log("添加失败！"));
+              }
+            }
           });
       }
     );
-
-    if (name === "") {
-      console.log("...");
-    } else {
-      if (
-        addProduct(
-          name,
-          price,
-          description,
-          Catagory,
-          auth.currentUser.uid,
-          restaurantId
-        )
-      ) {
-        //添加成功
-        console.log("成功");
-        setOpen(false);
-      } else {
-        console.log(console.log("添加失败！"));
-      }
-    }
   };
 
   const handleClickOpen = () => {
@@ -230,7 +232,12 @@ export default function FormDialog() {
             />
 
             <label>Product Image</label>
-            <input type="file" name="file" id="fileButton" onInput={(e)=>setImage(e.target.files[0])}/>
+            <input
+              type="file"
+              name="file"
+              id="fileButton"
+              onInput={(e) => setImage(e.target.files[0])}
+            />
             {/* <progress value="0" max="100" id="uploader">0%</progress> */}
             {/* <input type="submit" value="上传"/> */}
             {/* <input type="file" onChange={handleChange}/>
@@ -247,14 +254,14 @@ export default function FormDialog() {
           </DialogActions>
         </Dialog>
         {products.map((product) => (
-          <Card key={product.id} className={classes.root}>
+          <Card key={product.imageUrl} className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.photo}
                 component="img"
                 alt={product.name}
                 height="140"
-                image="https://picsum.photos/200/300" //{Product.url}
+                image={product.imageUrl}
                 title={product.name}
               />
               <CardContent>

@@ -151,7 +151,7 @@ export default function FormDialog() {
   console.log("image: ", image);
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  useProtectedRoute();
+  
     return (
       <div>
         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
