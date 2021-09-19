@@ -28,6 +28,7 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 
 import OrderPage from "../order/orderPage";
 import BookingPage from "../booking/bookingPage";
+import ReportPage from "../report/reportPage";
 import {
   BrowserRouter as Router,
   Switch,
@@ -218,12 +219,14 @@ export default function HomePage(props) {
                   <ListItemText primary="Bookings" />
                 </ListItem>
               </Link>
+              <Link to="/report" style={{ textDecoration: "none" }}>
               <ListItem button>
                 <ListItemIcon>
                   <BarChartIcon />
                 </ListItemIcon>
                 <ListItemText primary="Reports" />
               </ListItem>
+              </Link>
               <ListItem button>
                 <ListItemIcon>
                   <LayersIcon />
@@ -245,6 +248,9 @@ export default function HomePage(props) {
               </Route>
               <Route exact path="/booking">
                 <BookingPage />
+              </Route>
+              <Route exact path="/report">
+                <ReportPage />
               </Route>
             </Switch>
             <Box pt={4}>

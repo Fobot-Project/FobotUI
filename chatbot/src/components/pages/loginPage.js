@@ -28,7 +28,7 @@ export default function Login() {
     try {
       await signInWithEmailAndPassword(email, password);
 
-      history.push("/restaurant");
+      history.push("/");
     } catch (err) {
       history.push("/");
     }

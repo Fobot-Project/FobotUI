@@ -22,7 +22,6 @@ import {
 } from "../../../firebase";
 import { useHistory } from "react-router-dom";
 import { storage } from "../../../firebase";
-import useProtectedRoute from "../../../useProtectedRoute";
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
@@ -151,7 +150,7 @@ export default function FormDialog() {
   console.log("image: ", image);
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  
+
     return (
       <div>
         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
