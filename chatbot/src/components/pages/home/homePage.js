@@ -29,6 +29,7 @@ import FastfoodIcon from "@material-ui/icons/Fastfood";
 import OrderPage from "../order/orderPage";
 import BookingPage from "../booking/bookingPage";
 import ReportPage from "../report/reportPage";
+import RestaurantPage from "../restaurant/restaurantPage";
 import {
   BrowserRouter as Router,
   Switch,
@@ -42,9 +43,9 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
+      <a color="inherit" href="https://material-ui.com/">
         Fobot.co.nz
-      </Link>{" "}
+      </a>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -241,7 +242,8 @@ export default function HomePage(props) {
           <Container maxWidth="lg" className={classes.container}>
             <Switch>
               <Route exact path={path}>
-                <h3>Home</h3>
+                <h3>Welcome!</h3>
+                <RestaurantPage />
               </Route>
               <Route exact path="/order">
                 <OrderPage />
