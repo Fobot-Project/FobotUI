@@ -163,7 +163,9 @@ export const getRestaurants = () => {
       .doc(getcurrentuserId())
       .collection("Restaurants")
       .onSnapshot((snapshot) => {
-        let updatedData = snapshot.docs.map((doc) => doc.data());
+        let updatedData = snapshot.docs
+        .filter((doc) => doc.id != "Empty")
+        .map((doc) => doc.data());
         resolve(updatedData);
       }, reject);
   });
