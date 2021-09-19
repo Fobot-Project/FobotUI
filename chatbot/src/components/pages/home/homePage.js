@@ -36,8 +36,12 @@ import {
   Route,
   Link,
   useRouteMatch,
-  useParams,
+  useHistory,
 } from "react-router-dom";
+
+import {
+  auth,
+} from "../../../firebase";
 
 function Copyright() {
   return (
@@ -134,6 +138,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function HomePage(props) {
+  const history = useHistory();
   let { path, url } = useRouteMatch();
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
@@ -143,6 +148,7 @@ export default function HomePage(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
 
   return (
     <div className={classes.root}>
@@ -242,7 +248,7 @@ export default function HomePage(props) {
           <Container maxWidth="lg" className={classes.container}>
             <Switch>
               <Route exact path={path}>
-                <h3>Welcome!</h3>
+                <h3>Welcome! {auth.currentUser.displayname}</h3>
                 <RestaurantPage />
               </Route>
               <Route exact path="/order">

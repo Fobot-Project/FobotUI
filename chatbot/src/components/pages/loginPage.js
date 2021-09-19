@@ -30,7 +30,7 @@ export default function Login() {
 
       history.push("/");
     } catch (err) {
-      history.push("/");
+      history.push("/login");
     }
   }
   function handleNavToLogin() {

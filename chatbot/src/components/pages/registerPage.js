@@ -32,13 +32,13 @@ export default function Register() {
 
     if ((userName !== "") & (password !== "") & (email !== "") & (/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
       if (registerWithEmailAndPassword(userName, email, password)){
-        history.push('/')
+        history.push('/login')
       }
     }
   }
 
   function handleNavToLogin(){
-    history.push('/')
+    history.push('/login')
   }
 
  
