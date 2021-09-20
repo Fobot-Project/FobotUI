@@ -20,7 +20,7 @@ import {
   getRestaurants,
   getcurrentuserId,
 } from "../../../firebase";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { storage } from "../../../firebase";
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -230,7 +230,7 @@ export default function FormDialog() {
           <Card
             key={restaurant.id}
             className={classes.root}
-            onClick={() => history.push(`/restaurant/${restaurant.id}`)}
+            // onClick={() => history.push(`/restaurant/${restaurant.id}`)}
           >
             <CardActionArea>
               <CardMedia
@@ -258,9 +258,31 @@ export default function FormDialog() {
               {/* <Button size="small" color="primary" onClick={handleAddProducts}>
                 add product
               </Button> */}
-              <Button size="small" color="primary">
+              <Link to={"/restaurant/"+restaurant.id} style={{ textDecoration: "none" }}>
+              <Button size="small" color="primary" variant="outlined">
                 Learn More
               </Button>
+              </Link>
+              <Link to={"/restaurant/"+restaurant.id+"/addproduct"} style={{ textDecoration: "none" }}>
+              <Button size="small" color="primary" variant="outlined">
+                Menu
+              </Button>
+              </Link>
+              <Link to={"/restaurant/"+restaurant.id+"/order"} style={{ textDecoration: "none" }}>
+              <Button size="small" color="primary" variant="outlined">
+                Order
+              </Button>
+              </Link>
+              <Link to={"/restaurant/"+restaurant.id+"/booking"} style={{ textDecoration: "none" }}>
+              <Button size="small" color="primary" variant="outlined">
+                Booking
+              </Button>
+              </Link>
+              <Link to={"/restaurant/"+restaurant.id+"/chatbot"} style={{ textDecoration: "none" }}>
+              <Button size="small" color="primary" variant="outlined">
+                Chatbot
+              </Button>
+              </Link>
             </CardActions>
           </Card>
         ))}
