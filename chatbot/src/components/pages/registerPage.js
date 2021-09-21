@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-
-import {
-
-  registerWithEmailAndPassword,
-} from "../../firebase";
-
+import { useAuth } from "../../context/AuthContext"
 
 
 export default function Register() {
@@ -14,6 +9,7 @@ export default function Register() {
   const [c_password, setCPassowrd] = useState("");
   const [email, setEmail] = useState("");
   const [info, setInfo] = useState("");
+  const { signup } = useAuth()
 
   var history = useHistory();
 
@@ -31,7 +27,7 @@ export default function Register() {
     }
 
     if ((userName !== "") & (password !== "") & (email !== "") & (/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
-      if (registerWithEmailAndPassword(userName, email, password)){
+      if (signup(userName, email, password)){
         history.push('/login')
       }
     }
