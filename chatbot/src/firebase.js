@@ -26,71 +26,7 @@ const storage = firebase.storage();
 
 export { storage, firebase as default };
 
-const signInWithEmailAndPassword = async (email, password) => {
-  try {
-    await auth.signInWithEmailAndPassword(email, password);
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-    throw new Error();
-  }
-};
 
-const registerWithEmailAndPassword = async (name, email, password) => {
-  try {
-    const res = await auth
-      .createUserWithEmailAndPassword(email, password)
-      .catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        if (errorCode === "auth/weak-password") {
-          alert("The password is too weak.");
-        } else {
-          alert(errorMessage);
-        }
-        console.log(error);
-      });
-    const user = res.user;
-    const data = {
-      name: name,
-      email: email,
-      authProvider: "local",
-      icon_image: defaultImage,
-    };
-
-    await db.collection("User").doc(user.uid).set(data);
-    await db
-      .collection("User")
-      .doc(user.uid)
-      .collection("restaurants")
-      .doc("Empty")
-      .set({
-        status: "empty",
-      });
-    return auth.currentUser.updateProfile({
-      displayName: name,
-    });
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-    return false;
-  }
-};
-
-const sendPasswordResetEmail = async (email) => {
-  try {
-    await auth.sendPasswordResetEmail(email);
-    alert("Password reset link sent!");
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
-
-const logout = () => {
-  auth.signOut();
-};
 
 const addRestaurant = async (name, address, phonenum, userID, url) => {
   if (!name) {
@@ -235,11 +171,7 @@ export const getProducts = (rid) => {
 export {
   auth,
   db,
-  signInWithEmailAndPassword,
-  registerWithEmailAndPassword,
-  sendPasswordResetEmail,
   addRestaurant,
-  logout,
   getcurrentuserId,
   getcurrentuser,
   getcurrentRestaurantId,

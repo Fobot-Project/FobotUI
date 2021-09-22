@@ -2,32 +2,20 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/login.css";
 import "../../assets/css/App.css";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"
 
-import { auth, signInWithEmailAndPassword } from "../../firebase";
+
 
 export default function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const { login } = useAuth()
 
   const history = useHistory();
-  //useEffect(() => auth.onAuthStateChanged(email), [email]);
-  useEffect(() => {
-    const unsub = auth.onAuthStateChanged((authObj) => {
-      unsub();
-      if (authObj) {
-        // logged in, use authObj
-      } else {
-        handleReg()
-      }
-    });
-  }, []);
+
   async function handleReg() {
-    if(auth.currentUser){
-
-    }
     try {
-      await signInWithEmailAndPassword(email, password);
-
+      await login(email, password);
       history.push("/");
     } catch (err) {
       history.push("/login");

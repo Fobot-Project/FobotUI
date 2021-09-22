@@ -3,16 +3,16 @@ import { auth, db, storage } from "../firebase"
 
 const AuthContext = React.createContext()
 
-const defaultImage =
-  "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
+
 
 export function useAuth() {
   return useContext(AuthContext)
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState()
-  const [loading, setLoading] = useState(true)
+const defaultImage = "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
+const [currentUser, setCurrentUser] = useState()
+const [loading, setLoading] = useState(true)
 
 const register = async (name, email, password) => {
     try {

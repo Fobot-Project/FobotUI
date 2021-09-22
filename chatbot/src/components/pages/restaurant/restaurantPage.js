@@ -14,6 +14,8 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
+import { useAuth } from "../../../context/AuthContext";
+
 import {
   addRestaurant,
   auth,
@@ -54,14 +56,14 @@ export default function FormDialog() {
   const [uploadedImageUrl, setuploadedImageUrl] = useState("");
   const [userId, setUserId] = useState("");
   const history = useHistory();
-  // const {currentUser} = useAuthState()
+  const {currentUser} = useAuth()
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
     const unsub = auth.onAuthStateChanged((authObj) => {
       unsub();
       if (authObj) {
-        setUserId(auth.currentUser.uid);
+        setUserId(currentUser.uid);
         getRestaurants().then((doc) => {
           setRestaurants(doc);
         });
@@ -69,16 +71,7 @@ export default function FormDialog() {
       }
     });
   }, [open]);
-  // useEffect(() => {
-  //   auth.onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-        
-  //     } else {
-  //       // User is signed out
-  //       // ...
-  //     }
-  //   });
-  // }, [open]);
+
   const handleAdd = () => {
     const uploadTask = storage
       .ref("users images/retaurants_images/" + image.name)

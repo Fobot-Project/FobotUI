@@ -207,7 +207,7 @@ export default function HomePage(props) {
           <Divider />
           <List>
             <div>
-              <Link to="/home" style={{ textDecoration: "none" }}>
+              <Link to="/" style={{ textDecoration: "none" }}>
                 <ListItem button>
                   <ListItemIcon>
                     <RestaurantIcon />
