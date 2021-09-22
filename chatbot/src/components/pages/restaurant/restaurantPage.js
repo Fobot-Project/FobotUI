@@ -69,9 +69,10 @@ export default function FormDialog() {
       }
     });
   }, [open]);
+  
   const handleAdd = () => {
     const uploadTask = storage
-      .ref(`users_images/retaurants_images/${image.name}`)
+      .ref(`users_images/${userId}/retaurants_images/${image.name}`)
       .put(image);
     uploadTask.on(
       "state_changed",
@@ -83,7 +84,7 @@ export default function FormDialog() {
       },
       () => {
         storage
-          .ref("users_images/retaurants_images")
+          .ref(`users_images/${userId}/retaurants_images`)
           .child(image.name)
           .getDownloadURL()
           .then((url) => {
