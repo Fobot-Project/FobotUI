@@ -19,15 +19,11 @@ function App() {
 
   return (
     <div className="App">
-      <Router history={history}>
         <AuthProvider>
-        <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
-          <PrivateRoute exact path="/" component={HomePage} />
-        </Switch>
+          <PrivateRoute  path="/" component={HomePage} />
         </AuthProvider>
-      </Router>
     </div>
   );
 }
