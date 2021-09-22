@@ -89,6 +89,22 @@ const register = async (name, email, password) => {
     return currentUser.updatePassword(password)
   }
 
+  // real-time listener getRestaurants
+  function getRestaurants() {
+    return new Promise((resolve, reject) => {
+      db
+        .collection("User")
+        .doc(currentUser.uid)
+        .collection("Restaurants")
+        .onSnapshot((snapshot) => {
+          let updatedData = snapshot.docs
+          .filter((doc) => doc.id != "Empty")
+          .map((doc) => doc.data());
+          resolve(updatedData);
+        }, reject);
+    });
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
@@ -105,7 +121,8 @@ const register = async (name, email, password) => {
     logout,
     resetEmail,
     updateEmail,
-    updatePassword
+    updatePassword,
+    getRestaurants
   }
 
   return (

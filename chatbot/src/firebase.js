@@ -21,7 +21,6 @@ const defaultImage =
   "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
 const auth = app.auth();
 const db = app.firestore();
-const firestore = app.firestore();
 const storage = firebase.storage();
 
 export { storage, firebase as default };
@@ -104,7 +103,7 @@ const getcurrentuserId = () => {
 // real-time listener getRestaurants
 export const getRestaurants = () => {
   return new Promise((resolve, reject) => {
-    firestore
+      db
       .collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
@@ -119,7 +118,7 @@ export const getRestaurants = () => {
 
 const getcurrentRestaurantId = (rid) => {
   return new Promise((res, rej) => {
-    firestore
+    db
       .collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
@@ -135,7 +134,7 @@ const getcurrentRestaurantId = (rid) => {
 };
 const getUrlById = (id) => {
   return new Promise((resolve, reject) => {
-    firestore
+    db
       .collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
@@ -155,7 +154,7 @@ const getUrlById = (id) => {
 // real-time listener getProducts
 export const getProducts = (rid) => {
   return new Promise((resolve, reject) => {
-    firestore
+    db
       .collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")

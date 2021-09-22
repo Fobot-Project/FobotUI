@@ -14,13 +14,12 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import { useAuth } from "../../../context/AuthContext";
+import { useAuth} from "../../../context/AuthContext";
 
 import {
   addRestaurant,
-  auth,
   getRestaurants,
-  getcurrentuserId,
+  auth,
 } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { storage } from "../../../firebase";
@@ -54,23 +53,23 @@ export default function FormDialog() {
   const [phone, setPhone] = useState("");
   const [image, setImage] = useState(null);
   const [uploadedImageUrl, setuploadedImageUrl] = useState("");
-  const [userId, setUserId] = useState("");
   const history = useHistory();
   const {currentUser} = useAuth()
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    const unsub = auth.onAuthStateChanged((authObj) => {
-      unsub();
-      if (authObj) {
-        setUserId(currentUser.uid);
-        getRestaurants().then((doc) => {
-          setRestaurants(doc);
+        getRestaurants().then((docs) => {
+          setRestaurants(docs);
         });
-      } else {
-      }
-    });
   }, [open]);
+
+//   useEffect(() => { 
+//     const unsubscribe = getRestaurants().then((docs) => {
+//       setRestaurants(docs);
+//     })
+//     //remember to unsubscribe from your realtime listener on unmount or you will create a memory leak
+//     // return () => unsubscribe()
+// }, []);
 
   const handleAdd = () => {
     const uploadTask = storage
@@ -97,7 +96,7 @@ export default function FormDialog() {
     if (name === "") {
       console.log("...");
     } else {
-      if (addRestaurant(name, address, phone, userId, uploadedImageUrl)) {
+      if (addRestaurant(name, address, phone, currentUser.uid, uploadedImageUrl)) {
         //添加成功
         console.log("成功");
         setOpen(false);
