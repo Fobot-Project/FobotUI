@@ -204,7 +204,7 @@ export default function HomePage(props) {
           <Divider />
           <List>
             <div>
-              <Link to="/" style={{ textDecoration: "none" }}>
+              <Link to={`${url}`} style={{ textDecoration: "none" }}>
                 <ListItem button>
                   <ListItemIcon>
                     <RestaurantIcon />
@@ -212,7 +212,7 @@ export default function HomePage(props) {
                   <ListItemText primary="Restaurants" />
                 </ListItem>
               </Link>
-              <Link to="/order" style={{ textDecoration: "none" }}>
+              <Link to={`${url}order`} style={{ textDecoration: "none" }}>
                 <ListItem button>
                   <ListItemIcon>
                     <FastfoodIcon />
@@ -220,7 +220,7 @@ export default function HomePage(props) {
                   <ListItemText primary="Orders" />
                 </ListItem>
               </Link>
-              <Link to="/booking" style={{ textDecoration: "none" }}>
+              <Link to={`${url}booking`} style={{ textDecoration: "none" }}>
                 <ListItem button>
                   <ListItemIcon>
                     <PeopleIcon />
@@ -228,7 +228,7 @@ export default function HomePage(props) {
                   <ListItemText primary="Bookings" />
                 </ListItem>
               </Link>
-              <Link to="/report" style={{ textDecoration: "none" }}>
+              <Link to={`${url}report`} style={{ textDecoration: "none" }}>
               <ListItem button>
                 <ListItemIcon>
                   <BarChartIcon />
@@ -236,12 +236,6 @@ export default function HomePage(props) {
                 <ListItemText primary="Reports" />
               </ListItem>
               </Link>
-              <ListItem button>
-                <ListItemIcon>
-                  <LayersIcon />
-                </ListItemIcon>
-                <ListItemText primary="Integrations" />
-              </ListItem>
             </div>
           </List>
         </Drawer>
@@ -253,35 +247,35 @@ export default function HomePage(props) {
                 <h3>Welcome! {auth.currentUser.displayname}</h3>
                 <RestaurantPage />
               </Route>
-              <Route exact path="/order">
+              <Route exact path={`${path}order`}>
                 <OrderPage />
               </Route>
-              <Route exact path="/booking">
+              <Route exact path={`${path}booking`}>
                 <BookingPage />
               </Route>
-              <Route exact path="/report">
+              <Route exact path={`${path}report`}>
                 <ReportPage />
               </Route>
               <Route
                 exact
-                path="/restaurant/:id"
+                path={`${path}/restaurant/:id`}
                 component={SingleRestaurantPage}
               />
               <Route
               exact
-              path="/restaurant/:id/addproduct"
+              path={`${path}/restaurant/:id/addproduct`}
               component={FormDialog} />
               <Route
               exact
-              path="/restaurant/:id/order"
+              path={`${path}/restaurant/:id/order`}
               component={RestaurantOrderPage} />
               <Route
               exact
-              path="/restaurant/:id/booking"
+              path={`${path}/restaurant/:id/booking`}
               component={RestaurantBookingPage} />
               <Route
               exact
-              path="/restaurant/:id/chatbot"
+              path={`${path}/restaurant/:id/chatbot`}
               component={RestaurantChatbotPage} />
 
             </Switch>
