@@ -15,10 +15,8 @@ import "./assets/css/style.css";
 // );
 
 ReactDOM.render(
-  <BrowserRouter basename={"/chatbot"}>
-
+  <BrowserRouter>
       <App />
-
   </BrowserRouter>,
   document.getElementById("root")
 );

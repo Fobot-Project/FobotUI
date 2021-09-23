@@ -188,7 +188,6 @@ export default function HomePage(props) {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Router>
         <Drawer
           variant="permanent"
           classes={{
@@ -284,7 +283,6 @@ export default function HomePage(props) {
             </Box>
           </Container>
         </main>
-      </Router>
     </div>
   );
 }
