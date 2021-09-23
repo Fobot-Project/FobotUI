@@ -14,12 +14,11 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import { useAuth} from "../../../context/AuthContext";
+import { useAuth } from "../../../context/AuthContext";
 
 import {
   addRestaurant,
   getRestaurants,
-  auth,
 } from "../../../firebase";
 import { Link, useHistory } from "react-router-dom";
 import { storage } from "../../../firebase";
@@ -63,13 +62,6 @@ export default function FormDialog() {
         });
   }, [open]);
 
-//   useEffect(() => { 
-//     const unsubscribe = getRestaurants().then((docs) => {
-//       setRestaurants(docs);
-//     })
-//     //remember to unsubscribe from your realtime listener on unmount or you will create a memory leak
-//     // return () => unsubscribe()
-// }, []);
 
   const handleAdd = () => {
     const uploadTask = storage
