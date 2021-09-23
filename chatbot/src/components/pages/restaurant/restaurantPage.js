@@ -54,6 +54,7 @@ export default function FormDialog() {
   const [uploadedImageUrl, setuploadedImageUrl] = useState("");
   const history = useHistory();
   const {currentUser} = useAuth()
+  // const [userId, setUserId] = useState("");
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
@@ -65,37 +66,44 @@ export default function FormDialog() {
 
   const handleAdd = () => {
     const uploadTask = storage
-      .ref("users images/retaurants_images/" + image.name)
+      .ref(`users_images/${currentUser.uid}/retaurants_images/${image.name}`)
       .put(image);
     uploadTask.on(
       "state_changed",
-      (snapshot) => {},
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
       (error) => {
         console.log(error);
       },
       () => {
         storage
-          .ref("image")
+          .ref(`users_images/${currentUser.uid}/retaurants_images`)
           .child(image.name)
           .getDownloadURL()
           .then((url) => {
-            console.log(url);
-            setuploadedImageUrl(url)
+            if(url){
+              setuploadedImageUrl(url)
+            console.log("restaurant image: "+ url)
+            if (name === "") {
+              console.log("...");
+            } else {
+              if (addRestaurant(name, address, phone, currentUser.uid, url)) {
+                //添加成功
+                // console.log(url)
+                console.log("成功");
+                setOpen(false);
+              } else {
+                console.log(console.log("添加失败！"));
+              }
+            }
+            }
+            
           });
       }
     );
 
-    if (name === "") {
-      console.log("...");
-    } else {
-      if (addRestaurant(name, address, phone, currentUser.uid, uploadedImageUrl)) {
-        //添加成功
-        console.log("成功");
-        setOpen(false);
-      } else {
-        console.log("添加失败！");
-      }
-    }
+
   };
   const handleClickOpen = () => {
     setOpen(true);
@@ -111,27 +119,27 @@ export default function FormDialog() {
     }
   };
 
-  const handleUpload = () => {
-    const uploadTask = storage
-      .ref("users images/retaurants_images/" + image.name)
-      .put(image);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {},
-      (error) => {
-        console.log(error);
-      },
-      () => {
-        storage
-          .ref("image")
-          .child(image.name)
-          .getDownloadURL()
-          .then((url) => {
-            console.log(url);
-          });
-      }
-    );
-  };
+  // const handleUpload = () => {
+  //   const uploadTask = storage
+  //     .ref("users images/retaurants_images/" + image.name)
+  //     .put(image);
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {},
+  //     (error) => {
+  //       console.log(error);
+  //     },
+  //     () => {
+  //       storage
+  //         .ref("image")
+  //         .child(image.name)
+  //         .getDownloadURL()
+  //         .then((url) => {
+  //           console.log(url);
+  //         });
+  //     }
+  //   );
+  // };
 
   console.log("image: ", image);
   const classes = useStyles();
@@ -214,7 +222,7 @@ export default function FormDialog() {
           <Card
             key={restaurant.id}
             className={classes.root}
-            // onClick={() => history.push(`/restaurant/${restaurant.id}`)}
+            
           >
             <CardActionArea>
               <CardMedia
@@ -223,8 +231,9 @@ export default function FormDialog() {
                 alt={restaurant.name}
                 //alt={firebase-image}
                 height="140"
-                image="https://picsum.photos/200/300" //{restaurant.url}
+                image={restaurant.imageUrl}
                 title={restaurant.name}
+                onClick={() => history.push(`/restaurant/${restaurant.id}`)}
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">

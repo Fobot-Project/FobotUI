@@ -41,7 +41,7 @@ export default function FormDialog() {
   const { id } = useParams();
 
   const handleAddProducts = () => {
-    history.push(`/restaurant/addProduct/${id}`);
+    history.push(`/restaurant/${id}/addProduct`);
   };
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function FormDialog() {
       <div>
         <Card
           className={classes.root}
-          onClick={() => history.push(`/restaurant/addproduct/${id}`)}
+          onClick={() => history.push(`/restaurant/${id}/addproduct`)}
         >
           <CardActionArea>
             <CardMedia

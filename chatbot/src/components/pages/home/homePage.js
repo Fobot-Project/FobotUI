@@ -33,7 +33,7 @@ import SingleRestaurantPage from "../restaurant/singleRestaurantPage";
 import RestaurantBookingPage from "../booking/restaurantBookingPage";
 import RestaurantOrderPage from "../order/restaurantOrderPage";
 import RestaurantChatbotPage from "../chatbot/restaurantChatbotPage";
-import FormDialog from "../restaurant/restaurantPage";
+import FormDialog from "../addproduct/addproductPage";
 import {
   BrowserRouter as Router,
   Switch,
@@ -46,6 +46,7 @@ import {
 import {
   auth,
 } from "../../../firebase";
+import Login from "../loginPage";
 
 function Copyright() {
   return (
@@ -152,7 +153,7 @@ export default function HomePage(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+   console.log(path)
 
   return (
     <div className={classes.root}>
@@ -183,8 +184,8 @@ export default function HomePage(props) {
           >
             Fobot
           </Typography>
-          <IconButton color="secondary">
-              <ExitToAppIcon />
+          <IconButton color="secondary" onClick={()=>auth.signOut()}>
+              <Link to= "/login"><ExitToAppIcon /></Link>
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -256,25 +257,25 @@ export default function HomePage(props) {
                 <ReportPage />
               </Route>
               <Route
-                exact
-                path={`${path}/restaurant/:id`}
+              exact 
+                path={`/restaurant/:id`}
                 component={SingleRestaurantPage}
               />
               <Route
               exact
-              path={`${path}/restaurant/:id/addproduct`}
+              path={`/restaurant/:id/addproduct`}
               component={FormDialog} />
               <Route
               exact
-              path={`${path}/restaurant/:id/order`}
+              path={`/restaurant/:id/order`}
               component={RestaurantOrderPage} />
               <Route
               exact
-              path={`${path}/restaurant/:id/booking`}
+              path={`/restaurant/:id/booking`}
               component={RestaurantBookingPage} />
               <Route
               exact
-              path={`${path}/restaurant/:id/chatbot`}
+              path={`/restaurant/:id/chatbot`}
               component={RestaurantChatbotPage} />
 
             </Switch>

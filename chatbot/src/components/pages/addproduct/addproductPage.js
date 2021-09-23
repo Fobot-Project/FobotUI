@@ -25,6 +25,7 @@ import {
   storage,
 } from "../../../firebase";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../../context/AuthContext";
 
 // import {
 //   addProduct
@@ -71,6 +72,7 @@ export default function FormDialog() {
   // const [image, setImage] = useState(null);
   const [restaurantId, setRestaurantId] = useState("");
   const { id } = useParams();
+  const {currentUser} = useAuth()
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState("");
   useEffect(() => {
@@ -97,8 +99,9 @@ export default function FormDialog() {
   };
 
   const handleAdd = () => {
+    // setOpen(false)
     const uploadTask = storage
-      .ref(`users_images/menu_images/${image.name}`)
+      .ref(`users_images/${currentUser.uid}/menu_images/${image.name}`)
       .put(image);
     uploadTask.on(
       "state_changed",
@@ -108,7 +111,7 @@ export default function FormDialog() {
       },
       () => {
         storage
-          .ref("users_images/menu_images")
+          .ref(`users_images/${currentUser.uid}/menu_images`)
           .child(image.name)
           .getDownloadURL()
           .then((url) => {
