@@ -153,7 +153,7 @@ export default function HomePage(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-   console.log(path)
+  
 
   return (
     <div className={classes.root}>
