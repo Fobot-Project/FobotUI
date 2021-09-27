@@ -132,6 +132,21 @@ const getcurrentRestaurantId = (rid) => {
       }, rej);
   });
 };
+
+const getcurrentRestaurantName = (rid) => {
+  return new Promise((resolve, reject) => {
+    db
+    .collection("User")
+    .doc(getcurrentuserId())
+    .collection("Restaurants")
+    .doc(rid)
+    .get()
+    .then((s) => {
+        resolve(s.data().name)
+      }, reject);
+});
+};
+
 const getUrlById = (id) => {
   return new Promise((resolve, reject) => {
     db
@@ -167,6 +182,22 @@ export const getProducts = (rid) => {
   });
 };
 
+// real-time listener getOrders
+const getOrders = (rid) => {
+  return new Promise((resolve, reject) => {
+    db
+      .collection("User")
+      .doc(getcurrentuserId())
+      .collection("Restaurants")
+      .doc(rid)
+      .collection("Order")
+      .onSnapshot((snapshot) => {
+        let updatedData = snapshot.docs.map((doc) => doc.data());
+        resolve(updatedData);
+      }, reject);
+  });
+};
+
 export {
   auth,
   db,
@@ -174,6 +205,8 @@ export {
   getcurrentuserId,
   getcurrentuser,
   getcurrentRestaurantId,
+  getcurrentRestaurantName,
   addProduct,
-  getUrlById
+  getUrlById,
+  getOrders
 };

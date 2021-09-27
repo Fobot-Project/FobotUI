@@ -1,65 +1,32 @@
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import {useParams
-} from "react-router-dom";
-import * as React from 'react';
+import clsx from "clsx";
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useParams } from "react-router-dom";
+
 import Paper from "@material-ui/core/Paper";
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import { useAuth } from "../../../context/AuthContext";
 
-
-const columns = [
-  { 
-    id: 'Restaurantname', 
-    label: 'Restaurantname', 
-    minWidth: 170 },
-
-  { 
-    id: 'Foodname', 
-    label: 'Foodname', 
-    minWidth: 100 },
-
-  {
-    id: 'Amount',
-    label: 'Amount',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-
-  {
-    id: 'Contact',
-    label: 'Contact',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-
-
-];
-
-function createData(Restaurantname, Foodname, Amount, Contact) {
-  
-  return { Restaurantname, Foodname, Amount, Contact};
-}
-
-const rows = [
-  
-];
+import {
+  auth,
+  getcurrentRestaurantId,
+  getcurrentRestaurantName,
+  getOrders,
+  getRestaurants,
+} from "../../../firebase";
 
 const useStyles = makeStyles((theme) => ({
-
-
   paper: {
     padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
+    display: "flex",
+    overflow: "auto",
+    flexDirection: "column",
   },
   fixedHeight: {
     height: 240,
@@ -67,7 +34,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function RestaurantOrderPage() {
-  let { id } = useParams();
+  const [restaurantId, setRestaurantId] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
+  const [orders, setOrders] = useState([]);
+  const { id } = useParams();
   const classes = useStyles();
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
@@ -83,12 +53,121 @@ export default function RestaurantOrderPage() {
     setPage(0);
   };
 
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        getcurrentRestaurantId(id).then((doc) => {
+          setRestaurantId(doc);
+        });
 
-  return(
+        if (restaurantId) {
+          getOrders(restaurantId).then((doc) => {
+            setOrders(doc);
+          });
+
+          getcurrentRestaurantName(restaurantId).then((doc) => {
+            setRestaurantName(doc);
+          });
+        }
+      } else {
+      }
+    });
+  }, [restaurantId, id]);
+
+  const columns = [
+    {
+      id: "name",
+      label: "Restaurantname",
+      minWidth: 170,
+    },
+
+    {
+      id: "food",
+      label: "Foodname",
+      minWidth: 100,
+    },
+
+    {
+      id: "amount",
+      label: "Amount",
+      minWidth: 170,
+      align: "right",
+      format: (value) => value.toLocaleString("en-US"),
+    },
+
+    {
+      id: "contact",
+      label: "Contact",
+      minWidth: 170,
+      align: "right",
+      format: (value) => value.toLocaleString("en-US"),
+    },
+  ];
+  let row = [];
+  let rows = [];
+
+  const createRowsData = () => {
+    for (let i = 0; i < orders.length; i++) {
+      if (orders[i][0]) {
+        row.push(
+          restaurantName,
+          orders[i][0].Food,
+          orders[i][0].Amount,
+          orders[i].Contact
+        );
+        rows.push(row);
+        row = [];
+      } else {
+        continue;
+      }
+    }
+    return rows;
+  };
+  createRowsData();
+
+  function createData(name, order) {
+    let food;
+    let amount;
+    let contact;
+    if (order) {
+      food = order[1];
+      amount = order[2];
+      contact = order[3];
+    }
+    return { name, food, amount, contact };
+  }
+
+  //let testraws = [rows.map((row) => createData(restaurantName, row))];
+
+  rows = [
+    createData(restaurantName, rows[0]),
+    createData(restaurantName, rows[1]),
+    createData(restaurantName, rows[2]),
+    createData(restaurantName, rows[3]),
+    createData(restaurantName, rows[4]),
+    createData(restaurantName, rows[5]),
+    createData(restaurantName, rows[6]),
+  ];
+  // function createData(name, food, amount, contact) {
+  //   return { name, food, amount, contact };
+  // }
+  // const testraws = [
+  //   createData("SOUL BAR&BISTRO", "caesar salad", 2, "1234"),
+  //   createData("SOUL BAR&BISTRO", "caesar salad", 3, "1234"),
+  //   createData("SOUL BAR&BISTRO", "IT", 60483973, "1234"),
+  //   createData("SOUL BAR&BISTRO", "US", 327167434, "1234"),
+  //   createData("SOUL BAR&BISTRO", "CA", 37602103, "1234"),
+  //   createData("SOUL BAR&BISTRO", "AU", 25475400, "1234"),
+  // ];createData(restaurantName, rows[0])
+
+  console.log(rows);
+
+  return (
     // <p>Order for restaurant: {id}</p>
 
-    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-       <p>Order for restaurant: {id}</p>
+    <Paper sx={{ width: "100%", overflow: "hidden" }}>
+      <p>Order for restaurant: {id}</p>
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -110,11 +189,11 @@ export default function RestaurantOrderPage() {
               .map((row) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column) => {
+                    {columns?.map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          {column.format && typeof value === 'number'
+                          {column.format && typeof value === "number"
                             ? column.format(value)
                             : value}
                         </TableCell>
@@ -136,6 +215,5 @@ export default function RestaurantOrderPage() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </Paper>
-
   );
 }

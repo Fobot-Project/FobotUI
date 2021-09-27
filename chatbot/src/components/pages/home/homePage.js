@@ -258,24 +258,24 @@ export default function HomePage(props) {
               </Route>
               <Route
               exact 
-                path={`/restaurant/:id`}
+                path={`${path}restaurant/:id`}
                 component={SingleRestaurantPage}
               />
               <Route
               exact
-              path={`/restaurant/:id/addproduct`}
+              path={`${path}restaurant/:id/addproduct`}
               component={FormDialog} />
               <Route
               exact
-              path={`/restaurant/:id/order`}
+              path={`${path}restaurant/:id/order`}
               component={RestaurantOrderPage} />
               <Route
               exact
-              path={`/restaurant/:id/booking`}
+              path={`${path}restaurant/:id/booking`}
               component={RestaurantBookingPage} />
               <Route
               exact
-              path={`/restaurant/:id/chatbot`}
+              path={`${path}restaurant/:id/chatbot`}
               component={RestaurantChatbotPage} />
 
             </Switch>
