@@ -2,7 +2,6 @@ import clsx from "clsx";
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useParams } from "react-router-dom";
-
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -12,7 +11,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import { useAuth } from "../../../context/AuthContext";
-
+import { v1 as uuidv1 } from "uuid";
 import {
   auth,
   getcurrentRestaurantId,
@@ -134,34 +133,13 @@ export default function RestaurantOrderPage() {
       food = order[1];
       amount = order[2];
       contact = order[3];
+      // if (order[1].length > 1) {
+      // }
     }
     return { name, food, amount, contact };
   }
-
-  //let testraws = [rows.map((row) => createData(restaurantName, row))];
-
-  rows = [
-    createData(restaurantName, rows[0]),
-    createData(restaurantName, rows[1]),
-    createData(restaurantName, rows[2]),
-    createData(restaurantName, rows[3]),
-    createData(restaurantName, rows[4]),
-    createData(restaurantName, rows[5]),
-    createData(restaurantName, rows[6]),
-  ];
-  // function createData(name, food, amount, contact) {
-  //   return { name, food, amount, contact };
-  // }
-  // const testraws = [
-  //   createData("SOUL BAR&BISTRO", "caesar salad", 2, "1234"),
-  //   createData("SOUL BAR&BISTRO", "caesar salad", 3, "1234"),
-  //   createData("SOUL BAR&BISTRO", "IT", 60483973, "1234"),
-  //   createData("SOUL BAR&BISTRO", "US", 327167434, "1234"),
-  //   createData("SOUL BAR&BISTRO", "CA", 37602103, "1234"),
-  //   createData("SOUL BAR&BISTRO", "AU", 25475400, "1234"),
-  // ];createData(restaurantName, rows[0])
-
-  console.log(rows);
+  console.log(orders[4]);
+  rows = rows.map((row) => createData(restaurantName, row));
 
   return (
     // <p>Order for restaurant: {id}</p>
@@ -188,8 +166,14 @@ export default function RestaurantOrderPage() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns?.map((column) => {
+                  <TableRow
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    key={row.code}
+                    key={rows.indexOf(row)}
+                  >
+                    {columns.map((column) => {
                       const value = row[column.id];
                       return (
                         <TableCell key={column.id} align={column.align}>
