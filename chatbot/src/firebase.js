@@ -34,8 +34,9 @@ const addRestaurant = async (name, address, phonenum, userID, url) => {
   }
   try {
     // const user = res.user;
+    const rest_id = uuidv1()
     const data = {
-      id: uuidv1(),
+      id: rest_id,
       name: name,
       address: address,
       phonenum: phonenum,
@@ -45,7 +46,7 @@ const addRestaurant = async (name, address, phonenum, userID, url) => {
       name: "Empty"
     }
 
-    await db.collection("User").doc(userID).collection("Restaurants").add(data)
+    await db.collection("User").doc(userID).collection("Restaurants").doc(rest_id).set(data)
     .then(
       function(docRef) {
         // Initialised the 'Menu' and 'Order' collection for the restaurants
