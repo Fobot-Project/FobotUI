@@ -15,7 +15,9 @@ var firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = !firebase.apps.length ? firebase.initializeApp(firebaseConfig): firebase.app();
+const app = !firebase.apps.length
+  ? firebase.initializeApp(firebaseConfig)
+  : firebase.app();
 
 const defaultImage =
   "gs://test-bot-hldq.appspot.com/static material/default user/Twemoji_1f61d.svg.png";
@@ -25,8 +27,6 @@ const storage = firebase.storage();
 
 export { storage, firebase as default };
 
-
-
 const addRestaurant = async (name, address, phonenum, userID, url) => {
   if (!name) {
     alert("Name is empty!");
@@ -34,23 +34,28 @@ const addRestaurant = async (name, address, phonenum, userID, url) => {
   }
   try {
     // const user = res.user;
-    const rest_id = uuidv1()
+    const rest_id = uuidv1();
     const data = {
       id: rest_id,
       name: name,
       address: address,
       phonenum: phonenum,
-      imageUrl: url
+      imageUrl: url,
+      menuurl: null,
     };
     const defaultItem = {
-      name: "Empty"
-    }
+      name: "Empty",
+    };
 
-    await db.collection("User").doc(userID).collection("Restaurants").doc(rest_id).set(data)
-    .then(
-      function(docRef) {
+    await db
+      .collection("User")
+      .doc(userID)
+      .collection("Restaurants")
+      .doc(rest_id)
+      .set(data)
+      .then(function (docRef) {
         // Initialised the 'Menu' and 'Order' collection for the restaurants
-        docRef.collection("Menu").add(defaultItem)
+        docRef.collection("Menu").add(defaultItem);
         // docRef.collection("Order").add(defaultItem)
       });
     return true;
@@ -61,7 +66,33 @@ const addRestaurant = async (name, address, phonenum, userID, url) => {
   }
 };
 
-const addProduct = async (name, price, description, Catagory, userID, RID, url) => {
+const addRestaurantmenuimg = async (url, rid) => {
+  try {
+    await db
+      .collection("User")
+      .doc(auth.currentUser.uid)
+      .collection("Restaurants")
+      .doc(rid)
+      .set({ menuurl: url }, { merge: true })
+      .then(console.log("Uplodad successful!"));
+
+    return true;
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+    return false;
+  }
+};
+
+const addProduct = async (
+  name,
+  price,
+  description,
+  Catagory,
+  userID,
+  RID,
+  url
+) => {
   if (!name) {
     alert("Name is empty!");
     return false;
@@ -72,7 +103,7 @@ const addProduct = async (name, price, description, Catagory, userID, RID, url) 
       price: price,
       description: description,
       Catagory: Catagory,
-      imageUrl: url
+      imageUrl: url,
     };
     await db
       .collection("User")
@@ -104,14 +135,13 @@ const getcurrentuserId = () => {
 // real-time listener getRestaurants
 export const getRestaurants = () => {
   return new Promise((resolve, reject) => {
-      db
-      .collection("User")
+    db.collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
       .onSnapshot((snapshot) => {
         let updatedData = snapshot.docs
-        .filter((doc) => doc.id != "Empty")
-        .map((doc) => doc.data());
+          .filter((doc) => doc.id != "Empty")
+          .map((doc) => doc.data());
         resolve(updatedData);
       }, reject);
   });
@@ -119,8 +149,7 @@ export const getRestaurants = () => {
 
 const getcurrentRestaurantId = (rid) => {
   return new Promise((res, rej) => {
-    db
-      .collection("User")
+    db.collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
       .get()
@@ -136,22 +165,20 @@ const getcurrentRestaurantId = (rid) => {
 
 const getcurrentRestaurantName = (rid) => {
   return new Promise((resolve, reject) => {
-    db
-    .collection("User")
-    .doc(getcurrentuserId())
-    .collection("Restaurants")
-    .doc(rid)
-    .get()
-    .then((s) => {
-        resolve(s.data().name)
+    db.collection("User")
+      .doc(getcurrentuserId())
+      .collection("Restaurants")
+      .doc(rid)
+      .get()
+      .then((s) => {
+        resolve(s.data().name);
       }, reject);
-});
+  });
 };
 
 const getUrlById = (id) => {
   return new Promise((resolve, reject) => {
-    db
-      .collection("User")
+    db.collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
       .onSnapshot((snapshot) => {
@@ -159,7 +186,7 @@ const getUrlById = (id) => {
         let url;
         updatedData.forEach((e) => {
           if (e.id === id) {
-            url = e.imageUrl
+            url = e.imageUrl;
           }
         });
         resolve(url);
@@ -170,8 +197,7 @@ const getUrlById = (id) => {
 // real-time listener getProducts
 export const getProducts = (rid) => {
   return new Promise((resolve, reject) => {
-    db
-      .collection("User")
+    db.collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
       .doc(rid)
@@ -186,8 +212,7 @@ export const getProducts = (rid) => {
 // real-time listener getOrders
 const getOrders = (rid) => {
   return new Promise((resolve, reject) => {
-    db
-      .collection("User")
+    db.collection("User")
       .doc(getcurrentuserId())
       .collection("Restaurants")
       .doc(rid)
@@ -203,11 +228,12 @@ export {
   auth,
   db,
   addRestaurant,
+  addRestaurantmenuimg,
   getcurrentuserId,
   getcurrentuser,
   getcurrentRestaurantId,
   getcurrentRestaurantName,
   addProduct,
   getUrlById,
-  getOrders
+  getOrders,
 };
