@@ -129,7 +129,7 @@ export default function FormDialog() {
   };
 
   const handleAdd = () => {
-    setOpen(false);
+    // setOpen(false);
     const uploadTask = storage
       .ref(`users_images/${currentUser.uid}/menu_images/${image.name}`)
       .put(image);
