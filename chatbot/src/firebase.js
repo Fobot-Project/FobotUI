@@ -70,6 +70,7 @@ const addRestaurantmenuimg = async (url, rid) => {
   try {
     await db
       .collection("User")
+
       .doc(auth.currentUser.uid)
       .collection("Restaurants")
       .doc(rid)

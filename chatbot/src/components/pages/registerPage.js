@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"
-
+import { useAuth } from "../../context/AuthContext";
+import "../../assets/css/login.css";
+import logo from "../../assets/logo/fobot.jpg";
 
 export default function Register() {
   const [userName, setUsername] = useState("");
@@ -9,38 +10,47 @@ export default function Register() {
   const [c_password, setCPassowrd] = useState("");
   const [email, setEmail] = useState("");
   const [info, setInfo] = useState("");
-  const { signup } = useAuth()
+  const { register } = useAuth();
 
   var history = useHistory();
 
-
   function handleReg() {
-
     if (userName === "" || password === "" || email === "") {
       setInfo("Please Fill All the Field!");
-    }
-    else if (password !== c_password) {
+    } else if (password !== c_password) {
       setInfo("Confirm Password Does Not Match the Password!");
-    }
-    else if (!(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
+    } else if (
+      !/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+        email
+      )
+    ) {
       setInfo("Please Enter a Vaild Email Address!");
     }
 
-    if ((userName !== "") & (password !== "") & (email !== "") & (/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
-      if (signup(userName, email, password)){
-        history.push('/login')
+    if (
+      (userName !== "") &
+      (password !== "") &
+      (email !== "") &
+      /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+        email
+      )
+    ) {
+      if (register(userName, email, password)) {
+        history.push("/");
       }
     }
   }
 
-  function handleNavToLogin(){
-    history.push('/login')
+  function handleNavToLogin() {
+    history.push("/login");
   }
 
- 
   return (
     <div className="card">
       <div className="card--header ">
+        <div className="logo-bg lobby-title">
+          <img src={logo} alt="logo"></img>
+        </div>
         <p className="title">Sign up</p>
       </div>
       <div className="card--body">
@@ -84,9 +94,17 @@ export default function Register() {
       <button onClick={handleReg} type="submit" id="signup" class="btn_sign-up">
         Register
       </button>
-      <p className="link">
+      <button
+        onClick={handleNavToLogin}
+        type="submit"
+        id="login"
+        class="btn_sign-up"
+      >
+        Login
+      </button>
+      {/* <p className="link">
         <a onClick={handleNavToLogin}>Login</a>
-      </p>
+      </p> */}
     </div>
   );
 }
