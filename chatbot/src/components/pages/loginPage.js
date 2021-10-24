@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import "../../assets/css/login.css";
 import "../../assets/css/App.css";
 import { useHistory } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"
-
-
+import { useAuth } from "../../context/AuthContext";
+import logo from "../../assets/logo/fobot.jpg";
 
 export default function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const { login } = useAuth()
+  const { login } = useAuth();
 
   const history = useHistory();
 
@@ -28,6 +27,9 @@ export default function Login() {
   return (
     <div className="card">
       <div className="card--header ">
+        <div className="logo-bg lobby-title">
+          <img src={logo} alt="logo"></img>
+        </div>
         <p className="title">Log in</p>
       </div>
       <div className="card--body">
@@ -53,9 +55,17 @@ export default function Login() {
       <button onClick={handleReg} type="submit" id="login" class="btn_sign-up">
         Log in
       </button>
-      <p className="link">
+      <button
+        onClick={handleNavToLogin}
+        type="submit"
+        id="signup"
+        class="btn_sign-up"
+      >
+        Register
+      </button>
+      {/* <p className="link">
         <a onClick={handleNavToLogin}>Register</a>
-      </p>
+      </p> */}
     </div>
   );
 }
