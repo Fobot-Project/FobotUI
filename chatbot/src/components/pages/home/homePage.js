@@ -13,7 +13,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -43,9 +43,7 @@ import {
   useHistory,
 } from "react-router-dom";
 
-import {
-  auth,
-} from "../../../firebase";
+import { auth } from "../../../firebase";
 import Login from "../loginPage";
 
 function Copyright() {
@@ -153,7 +151,6 @@ export default function HomePage(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  
 
   return (
     <div className={classes.root}>
@@ -184,106 +181,111 @@ export default function HomePage(props) {
           >
             Fobot
           </Typography>
-          <IconButton color="secondary" onClick={()=>auth.signOut()}>
-              <Link to= "/login"><ExitToAppIcon /></Link>
+          <IconButton color="secondary" onClick={() => auth.signOut()}>
+            <Link to="/login">
+              <ExitToAppIcon />
+            </Link>
           </IconButton>
         </Toolbar>
       </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-          }}
-          open={open}
-        >
-          <div className={classes.toolbarIcon}>
-            <IconButton onClick={handleDrawerClose}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </div>
-          <Divider />
-          <List>
-            <div>
-              <Link to={`${url}`} style={{ textDecoration: "none" }}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <RestaurantIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Restaurants" />
-                </ListItem>
-              </Link>
-              <Link to={`${url}order`} style={{ textDecoration: "none" }}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <FastfoodIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Orders" />
-                </ListItem>
-              </Link>
-              <Link to={`${url}booking`} style={{ textDecoration: "none" }}>
-                <ListItem button>
-                  <ListItemIcon>
-                    <PeopleIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Bookings" />
-                </ListItem>
-              </Link>
-              <Link to={`${url}report`} style={{ textDecoration: "none" }}>
+      <Drawer
+        variant="permanent"
+        classes={{
+          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+        }}
+        open={open}
+      >
+        <div className={classes.toolbarIcon}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          <div>
+            <Link to={`${url}`} style={{ textDecoration: "none" }}>
+              <ListItem button>
+                <ListItemIcon>
+                  <RestaurantIcon />
+                </ListItemIcon>
+                <ListItemText primary="Restaurants" />
+              </ListItem>
+            </Link>
+            <Link to={`${url}booking`} style={{ textDecoration: "none" }}>
+              <ListItem button>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Bookings" />
+              </ListItem>
+            </Link>
+            <Link to={`${url}report`} style={{ textDecoration: "none" }}>
+              <ListItem button>
+                <ListItemIcon>
+                  <FastfoodIcon />
+                </ListItemIcon>
+                <ListItemText primary="Orders" />
+              </ListItem>
+            </Link>
+            <Link to={`${url}order`} style={{ textDecoration: "none" }}>
               <ListItem button>
                 <ListItemIcon>
                   <BarChartIcon />
                 </ListItemIcon>
                 <ListItemText primary="Reports" />
               </ListItem>
-              </Link>
-            </div>
-          </List>
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
-            <Switch>
-              <Route exact path={path}>
-                <h3>Welcome! {auth.currentUser.displayname}</h3>
-                <RestaurantPage />
-              </Route>
-              <Route exact path={`${path}order`}>
-                <OrderPage />
-              </Route>
-              <Route exact path={`${path}booking`}>
-                <BookingPage />
-              </Route>
-              <Route exact path={`${path}report`}>
-                <ReportPage />
-              </Route>
-              <Route
-              exact 
-                path={`${path}restaurant/:id`}
-                component={SingleRestaurantPage}
-              />
-              <Route
+            </Link>
+          </div>
+        </List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Switch>
+            <Route exact path={path}>
+              <h3>Welcome! {auth.currentUser.displayname}</h3>
+              <RestaurantPage />
+            </Route>
+            <Route exact path={`${path}order`}>
+              <OrderPage />
+            </Route>
+            <Route exact path={`${path}booking`}>
+              <BookingPage />
+            </Route>
+            <Route exact path={`${path}report`}>
+              <ReportPage />
+            </Route>
+            <Route
+              exact
+              path={`${path}restaurant/:id`}
+              component={SingleRestaurantPage}
+            />
+            <Route
               exact
               path={`${path}restaurant/:id/addproduct`}
-              component={FormDialog} />
-              <Route
+              component={FormDialog}
+            />
+            <Route
               exact
               path={`${path}restaurant/:id/order`}
-              component={RestaurantOrderPage} />
-              <Route
+              component={RestaurantOrderPage}
+            />
+            <Route
               exact
               path={`${path}restaurant/:id/booking`}
-              component={RestaurantBookingPage} />
-              <Route
+              component={RestaurantBookingPage}
+            />
+            <Route
               exact
               path={`${path}restaurant/:id/chatbot`}
-              component={RestaurantChatbotPage} />
-
-            </Switch>
-            <Box pt={4}>
-              <Copyright />
-            </Box>
-          </Container>
-        </main>
+              component={RestaurantChatbotPage}
+            />
+          </Switch>
+          <Box pt={4}>
+            <Copyright />
+          </Box>
+        </Container>
+      </main>
     </div>
   );
 }
